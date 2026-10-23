@@ -245,7 +245,8 @@ function sched(n,d){const t=S.tr[n.tr];if(role(n)=='auto'&&trGain(t)>0&&!peerHas
 function tick(){if(!S.playing)return;let p=posNow();const N=S.notes.length,nt=S.notes,L=loopSec();
 if(L&&p>=L[1]){const n=L[1]-L[0];while(p>=L[1]){S.pos0-=n;p-=n}const i=idx(L[0]);for(let k=i;k<N&&nt[k].t<L[1];k++)nt[k].j=0;S.mi=S.wi=i;S.ai=Math.max(i,S.li);S.li=i;S.bk=Math.max(L[0],S.bk2);S.bk2=L[0]}
 if($('md').value=='wait'){while(S.wi<N&&(nt[S.wi].j||!isPlay(nt[S.wi])))S.wi++;
-if(S.wi<N&&nt[S.wi].t<=p&&p>=0&&!(L&&nt[S.wi].t>=L[1])){S.pos0=nt[S.wi].t;S.t0=now();p=S.pos0;S.waiting=true}else S.waiting=false}
+const w0=S.waiting;if(S.wi<N&&nt[S.wi].t<=p&&p>=0&&!(L&&nt[S.wi].t>=L[1])){S.pos0=nt[S.wi].t;S.t0=now();p=S.pos0;S.waiting=true}else S.waiting=false;
+/* 同期：待ち始めたら「停止」、動き出したら「その位置から再生」を送り、相手も一緒に止まって待つ */if(S.waiting!==w0)pushState()}
 else{while(S.mi<N&&nt[S.mi].t<p-.18){const n=nt[S.mi++];if(isPlay(n)&&!n.j){n.j=2;S.miss++;S.cb=0;fb('ミス','#e63946')}}}
 if(!S.waiting){const ah=p+.08*S.rate,lim=L?Math.min(ah,L[1]):ah;while(S.ai<N&&nt[S.ai].t<lim){const n=nt[S.ai++];sched(n,n.t-p)}if(lim>S.bk){beatsIn(S.bk,lim,0,p);S.bk=lim}
 if(L&&ah>L[1]){const a2=L[0]+(ah-L[1]);if(S.li<idx(L[0]))S.li=idx(L[0]);while(S.li<N&&nt[S.li].t<a2&&nt[S.li].t<L[1]){const n=nt[S.li++];sched(n,L[1]-p+n.t-L[0])}if(a2>S.bk2){beatsIn(Math.max(S.bk2,L[0]),a2,L[1]-L[0],p);S.bk2=a2}}}
@@ -424,7 +425,7 @@ const peerHas=ch=>$('mu').checked&&live().some(p=>(p.plays&&p.plays.channels||[]
 const syncTxt=()=>(room?'部屋'+room+(ok?(isParent?'(親)':'(子)'):'(接続中)')+' ':'')+'相手'+live().length;
 function net(m,ex){if(isParent){for(const c of conns)if(c!==ex&&c.open)c.send(m)}else if(pconn&&pconn.open&&ready)pconn.send({...m,at:m.at+off})}
 function send(m){seen.add(m.mid);BC.postMessage(m);net(m)}
-const stateMsg=()=>mk('state',{playing:S.playing,pos:S.playing?posNow()-DLY/1000*S.rate:S.pos,rate:S.rate,loop:S.loop?{a:S.loop.a,b:S.loop.b}:null,countFrom:S.playing&&S.cf!=null&&posNow()<S.cf?S.cf:null,plays:plays(),song:{name:fname,len:S.len}});
+const stateMsg=()=>mk('state',{playing:S.playing&&!S.waiting,pos:S.waiting?S.pos0:S.playing?posNow()-DLY/1000*S.rate:S.pos,rate:S.rate,loop:S.loop?{a:S.loop.a,b:S.loop.b}:null,countFrom:S.playing&&S.cf!=null&&posNow()<S.cf?S.cf:null,plays:plays(),song:{name:fname,len:S.len}});
 function pushState(){if(!S.len)return;const m=stateMsg();lastAt=m.at;leader=ID;send(m)}
 const pushSong=()=>{if(b64)send(mk('song',{name:fname,data:b64}))};
 const target=m=>m.pos+(Date.now()-m.at)/1000*m.rate+DLY/1000*m.rate;
@@ -460,7 +461,7 @@ c.on('data',d=>nrecv(d,c));c.on('close',()=>{pconn=null;ok=false;if(room==r)setT
 $('jb').onclick=()=>{const r=$('rm').value.trim();if(!/^\d{4,8}$/.test(r)){$('sy').textContent='部屋番号は4〜8桁の数字です';return}$('sy').textContent='接続中…（親になるか子になるかは自動で決まります）';join(r)};
 $('lb').onclick=()=>{send(mk('bye'));leave(false);$('sy').textContent='切断しました'};
 $('dl').onchange=e=>{DLY=+e.target.value||0};
-setInterval(()=>{if(S.playing&&leader===ID&&$('md').value!='wait'&&S.len){const m=stateMsg();m.type='tick';send(m)}},1000);
+setInterval(()=>{if(S.playing&&!S.waiting&&leader===ID&&S.len){const m=stateMsg();m.type='tick';send(m)}},1000);
 setInterval(()=>send(mk('ping',{plays:plays()})),2000);
 addEventListener('pagehide',()=>send(mk('bye')));
 // ---- UI ----
@@ -486,6 +487,7 @@ $('mxr').onclick=()=>{for(const t of S.tr){t.vol=100;t.mu=t.so=false}renderMix()
 $('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss'])$(id).onchange=sv;rcUI();
 $('fe').onchange=()=>{if(!$('fe').checked)S.sel=-1};
 for(let p=48;p<=72;p++)$('sp').add(new Option(CN[p%12]+(Math.floor(p/12)-1)+(p==60?'（真ん中のド）':''),p));$('sp').value=60;$('sp').onchange=()=>{S.sp=+$('sp').value;fit();buildSheet();sv()};$('kr').onchange=()=>{fit();sv()};$('zm').onchange=sv;
+$('md').onchange=()=>{if(S.waiting){S.waiting=false;S.t0=now();pushState()}};
 $('cf').onclick=()=>{$('pn').style.top=($('bar').offsetHeight+6)+'px';$('pn').style.maxHeight='calc(100% - '+($('bar').offsetHeight+16)+'px)';$('pn').hidden=!$('pn').hidden};$('x').onclick=()=>$('pn').hidden=true;
 if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
 addEventListener('resize',mxPlace);mixTop();renderMix();mxShow(MX.open??mxDock(),false);addEventListener('pointerdown',()=>{if(ac)au()});rs();mi();draw();send(mk('hello',{plays:plays()}));
