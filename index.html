@@ -67,6 +67,12 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
   <h2>このソフトの特徴<span style="font-weight:400;letter-spacing:0">（押すと説明と画面が開きます）</span></h2>
   <div class="feats">
     <details class="feat"><summary>🎹 インストール不要・無料</summary><div><p>ブラウザで開くだけで使えます。パソコン・スマホ・タブレットとも同じページです。MIDIキーボードがなくても、画面の鍵盤（複数の指で押せます）や、パソコンのキーボードで弾けます。</p></div></details>
+    <details class="feat"><summary>🎵 内蔵の練習曲25曲（5段階）</summary><div><p>MIDIファイルがなくても、すぐ練習できるピアノの曲が入っています。レベル1は右手だけ・5つの音で弾ける曲（伴奏は自動）、レベル5は中級の入り口です。著作権の切れた名曲のやさしい編曲と、このソフトのためのオリジナル曲です。レベル1〜2には指番号もついています。</p>
+      <ul><li>レベル1　はじめて（右手だけ・5つの音）：ホット・クロス・バン、メリーさんのひつじ、ちょうちょう、かえるの合唱、きらきら星</li>
+      <li>レベル2　右手を広く（付点・8分音符）：よろこびの歌、ロンドン橋、ジングルベル、聖者の行進、はじめてのワルツ</li>
+      <li>レベル3　両手で（左手は1音ずつ）：よろこびの歌（両手）、メヌエット ト長調、きよしこの夜、朝の散歩、雨上がりのワルツ</li>
+      <li>レベル4　左手の和音・分散和音：エリーゼのために、カノン、グリーンスリーブス、月のワルツ、春のロンド</li>
+      <li>レベル5　中級の入り口：トルコ行進曲、風のエチュード、夕暮れのノクターン、行進曲、きらめきのソナチネ</li></ul></div></details>
     <details class="feat"><summary>🎼 MIDIファイルを落ちてくるノーツに</summary><div><p>MIDIファイルを読み込むと、弾く音が上から落ちてきて、弾くときに鍵盤が光ります。小節線と小節番号、音名（ドレミ・CDE）も出せます。鍵盤は自分の弾くパートに合わせた数だけ表示し、25〜88鍵から選んだり、2本指のピンチで増やしたり減らしたりもできます。</p></div></details>
     <details class="feat"><summary>🖐 右手・左手を分けて練習</summary><div><p>トラックごとに右手・左手を決めるか、音の高さで分けます。片手だけ練習するときは、もう片方の手を自動で鳴らします。ノーツは手ごとに色分け（右手＝緑、左手＝青）します。</p><img src="img/hands.jpg" alt="右手だけを練習している画面。左手の音符は灰色" loading="lazy" class="tall"></div></details>
     <details class="feat"><summary>📝 楽譜も表示（簡易版）</summary><div><p>画面の上に大譜表（ト音記号とヘ音記号）を出し、曲に合わせて流します。今鳴っている音は青、弾けた音は緑、ミスは赤になります。MIDIから自動で作るので、休符や連桁など、省いているところがあります。</p></div></details>
@@ -84,7 +90,7 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
     <li>Google Chrome や Microsoft Edge などのブラウザで使えます。</li>
     <li>MIDIキーボードや電子ピアノをUSBでつなぐ場合、開いたときに「MIDIデバイスの操作と再プログラム」の許可を求められたら「許可」を選んでください。つながない場合は、どちらを選んでも使えます。</li>
     <li>iPhone・iPad の Safari や Chrome は MIDIキーボードとの接続に対応していません。画面の鍵盤で弾くことはできます。</li>
-    <li>MIDIファイルが手元にないときは、<a href="https://pikadrum.github.io/drum/">ドラム練習スコープの配布ページ</a>にある練習用の曲（著作権フリーのオリジナル曲）で試せます。メロディ（リードやサックス）のパートを鍵盤で弾けます。</li>
+    <li>ソフトには、ピアノの練習曲が25曲入っています（上の「内蔵の練習曲」）。バンドの曲で練習したいときは、<a href="https://pikadrum.github.io/drum/">ドラム練習スコープの配布ページ</a>にある練習用の曲（著作権フリーのオリジナル曲）も使えます。メロディ（リードやサックス）のパートを鍵盤で弾けます。</li>
   </ul>
 
   <h2>ご要望・不具合の報告</h2>
@@ -95,13 +101,16 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
   <div class="infos">
     <details class="feat"><summary>📖 使い方</summary><div>
       <ul>
-        <li>「ソフトを開く」から開き、左上の「MIDI」でMIDIファイルを選んで、▶ で再生します。</li>
-        <li>はじめは、いちばん高い音域のトラックが「演奏」（自分で弾く）、ほかは「自動」（伴奏）になります。ミキサーで演奏／自動／消音を、「設定」のトラックの一覧で右手／左手／分割を変えられます。</li>
+        <li>「ソフトを開く」から開き、左上の「🎵 曲を選ぶ」で内蔵の練習曲を選ぶか、「📂 MIDIファイルを開く…」で手元のMIDIファイルを開いて、▶ で再生します。</li>
+        <li>MIDIファイルを開くと、はじめはメロディらしいパートが「演奏」（自分で弾く）、ほかは「自動」（伴奏）になります。内蔵の練習曲は、レベル1〜2は右手だけ、レベル3からは両手が「演奏」になります。ミキサーで演奏／自動／消音を、「設定」のトラックの一覧で右手／左手／分割を変えられます。</li>
         <li>弾き方は3通りです。MIDIキーボード、画面の鍵盤（指をすべらせると鍵が切り替わります）、パソコンのキーボード（<kbd>Z</kbd>〜<kbd>/</kbd> の段と <kbd>Q</kbd>〜<kbd>]</kbd> の段。<kbd>←</kbd> <kbd>→</kbd> でオクターブ、<kbd>Space</kbd> で再生／停止）。</li>
         <li>上のバーの「🎚 音量」でミキサーを開け閉めします（パソコンなど広い画面では、はじめから左に出ています）。名前のボタンを押すと、その音をミュートします（カウントとメトロノームは、オン・オフ）。パートの「M」はミュート、「S」はソロです。</li>
         <li>上のバーの「ループ」は、1回目で今の小節を始まりに、2回目で今の小節を終わりにします。3回目で解除です。「設定」で小節番号を入れて決めることもできます。</li>
         <li>上のバーで、テンポ、「通常／待つ」、「両手／右手／左手」、ノーツの落ちる速さを選べます。</li>
         <li>鍵盤の数は、ノーツが落ちてくる所を2本指でピンチして増やしたり減らしたりできます。2本指のまま横に動かすと左右に移動します。パソコンではホイールで増減、<kbd>Shift</kbd>＋ホイールで移動します。</li>
+        <li>スマホを横にすると、画面を触ったときに全画面になります（Android など。設定で切り替えられます）。スマホの横画面では、ノーツの所を軽くタップすると上のバーが隠れて、ノーツが長く見えます。iPhone・iPad は、Safari の共有ボタンから「ホーム画面に追加」して、そこから開くとアドレスバーが出ません。</li>
+        <li>スマホの「戻る」ボタンで、開いている設定やミキサー、結果の画面を閉じられます。</li>
+        <li>ソフトの「設定」の一番下に、このページのQRコードがあります。スマホやタブレットのカメラで読み取ると、そのまま開けます。</li>
         <li>設定・自己ベスト・運指・最近開いた曲（最大10曲）は、その端末のブラウザに保存されます。別の端末や別のブラウザには引き継がれません。</li>
         <li>ドラム練習スコープとの同期（同じ端末）は、両方ともこの配布ページ（pikadrum.github.io）から開いたときに使えます。</li>
       </ul></div></details>
@@ -118,7 +127,7 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
       <p>楽譜の記号には、<a href="https://fonts.google.com/noto/specimen/Noto+Music" target="_blank" rel="noopener">Noto Music</a>（Google Fonts）を使用しています。ライセンス：<a href="https://openfontlicense.org/" target="_blank" rel="noopener">SIL Open Font License 1.1</a></p>
       <p lang="en" style="font-size:12px">Sound samples: "FluidR3_GM" by Frank Wen, via midi-js-soundfonts by Benjamin Gleitzman, licensed under CC BY 3.0. No modifications were made. Music symbols: Noto Music via Google Fonts, licensed under the SIL Open Font License 1.1.</p></div></details>
     <details class="feat"><summary>📜 利用規約・ライセンス</summary><div>
-      <p>本ソフトウェアは、以下の条件のもとで自由にご利用いただけます。（「高音質」の音色データと楽譜の文字は、本規約ではなく、それぞれのライセンスに従います）</p>
+      <p>本ソフトウェア（内蔵の練習曲を含む）は、以下の条件のもとで自由にご利用いただけます。（「高音質」の音色データと楽譜の文字は、本規約ではなく、それぞれのライセンスに従います）</p>
       <ol>
         <li><b>無償でのご利用</b>：完全に無償（無料）でご利用いただけます。</li>
         <li><b>商用利用</b>：個人・法人を問わず、商用利用（ビジネス・営利目的）が可能です。</li>

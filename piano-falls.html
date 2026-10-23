@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Piano Falls</title>
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Piano Falls</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0e1116"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Music&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0e1116;--p:#1a1f29;--fg:#e8ebf0;--d:#8d93a0;--ac:#4cc9f0}
@@ -31,7 +31,12 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 #lp.on{border-color:var(--ac);color:var(--ac)}
 #st{color:var(--d);font-size:12px;width:100%}
 #pn{position:absolute;top:96px;left:8px;right:8px;max-height:68%;overflow:auto;background:#1a1f29;border:1px solid #2c3442;border-radius:12px;padding:12px;touch-action:pan-y}
-#pn h3{margin:8px 0 6px;font-size:13px;color:var(--ac)}#pn textarea{width:100%;margin-top:6px}
+#pn h3{margin:8px 0 6px;font-size:13px;color:var(--ac)}
+#pn .pnh{position:sticky;top:-12px;margin:-12px -12px 6px;padding:10px 12px;background:#1a1f29;border-bottom:1px solid #2c3442;display:flex;align-items:center;gap:8px;z-index:1}#pn .pnh b{flex:1;font-size:15px}
+#pn.full{top:0!important;left:0;right:0;bottom:0;max-height:none!important;border-radius:0;border:0;z-index:5;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+#pn .qr{width:150px;height:150px;display:block;margin:6px 0;border-radius:6px}
+#bs{position:absolute;top:6px;right:8px;z-index:3;padding:4px 10px;opacity:.75}
+#bar.hid{display:none}#pn textarea{width:100%;margin-top:6px}
 .r{display:flex;align-items:center;gap:8px;margin:4px 0}.r i{width:12px;height:12px;border-radius:3px}.r span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .n{color:var(--d);font-size:12px;line-height:1.6}
 .tw{flex-wrap:wrap}.tw input[type=range]{flex-basis:100%;margin:0 0 6px 20px}
@@ -41,7 +46,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 #res table{margin:10px auto;border-collapse:collapse;font-size:13px}#res td{padding:2px 8px;text-align:left}#res td+td{text-align:right}
 [hidden]{display:none!important}
 </style></head><body>
-<canvas id="c"></canvas>
+<canvas id="c"></canvas><button id="bs" hidden title="上のバーを出す">︙</button>
 <div id="mx" hidden><div class="mxh"><b>音量</b><button id="mxr" title="パートの音量を初期値に戻し、ミュートとソロを解除">初期値に戻す</button><button id="mxc" title="閉じる">✕</button></div>
 <div class="mxg">
 <div class="mr"><button class="mb" data-m="all" title="押すとミュート">全体</button><input type="range" id="vAll" min="0" max="100" value="100"><span class="mv"></span></div>
@@ -55,15 +60,15 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <div class="n">M＝ミュート、S＝ソロ（押したパートだけ鳴らす）。左下の欄で「演奏（自分で弾く）／自動（伴奏）／消音」を変えられます。</div></div>
 <div id="res" hidden><div id="rk" class="k"></div><div id="rsS" class="s"></div><div id="rsc"></div><table id="rt2"></table><div id="rb" style="color:#7bd88f;min-height:1.4em"></div><button id="rx">閉じる</button></div>
 <div id="bar">
-<label class="b">MIDI<input id="f" type="file" accept=".mid,.midi" hidden></label>
+<select id="sg" title="曲を選ぶ" style="max-width:170px"></select><input id="f" type="file" accept=".mid,.midi" hidden>
 <button id="pl">▶</button><input id="sk" type="range" min="0" max="1000" value="0" style="flex:1;min-width:90px">
 <button id="lp">ループ</button>
 <select id="rt"></select>
 <select id="md"><option value="free">通常<option value="wait">待つ</select>
 <select id="hd"><option value="B">両手<option value="R">右手<option value="L">左手</select>
 <select id="zm"><option value=".6">遅<option value="1" selected>標準<option value="1.6">速</select>
-<button id="mxb">🎚 音量</button><button id="cf">設定</button><span id="st">MIDIファイルを読み込んでください</span></div>
-<div id="pn" hidden><h3>最近開いた曲</h3><div id="rc" class="n">まだありません</div>
+<button id="mxb">🎚 音量</button><button id="cf">設定</button><span id="st">左上の「🎵 曲を選ぶ」から、練習曲かMIDIファイルを選んでください</span></div>
+<div id="pn" hidden><div class="pnh"><b>設定</b><button id="x2">✕ 閉じる</button></div><h3>最近開いた曲</h3><div id="rc" class="n">まだありません</div>
 <h3>トラック（演奏＝自分で弾く／自動＝伴奏）</h3><div id="tl"></div>
 <div class="r"><span>移調（半音）</span><select id="tp"></select></div>
 <div class="n">右の欄は、そのトラックをどちらの手で弾くかです。「分割」は、下の高さを境に、上を右手、下を左手にします。上のバーの「両手／右手／左手」で片手だけ練習すると、もう片方は自動で鳴ります。</div>
@@ -100,8 +105,15 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <div class="r"><span>この端末の音の遅れ(ms)</span><input id="dl" class="b" type="number" value="0" style="width:84px"></div>
 <h3>このソフトについて</h3>
 <div class="n">使い方・音色のクレジット・利用規約は <a href="https://pikadrum.github.io/keys/" target="_blank" rel="noopener" style="color:var(--ac)">配布ページ</a> にあります。「高音質」の音色は FluidR3_GM（Frank Wen、CC BY 3.0、midi-js-soundfonts 経由）を使っています。姉妹ソフト：<a href="https://pikadrum.github.io/drum/" target="_blank" rel="noopener" style="color:var(--ac)">ドラム練習スコープ</a></div>
+<label class="r"><input type="checkbox" id="afs" checked>スマホを横にしたら、画面を触ったときに全画面にする</label>
+<div class="r"><button id="fsb">全画面にする／戻す</button></div>
+<div class="n">画面の低いとき（スマホの横画面など）は、ノーツの所を軽くタップすると上のバーを隠せます。もう一度タップするか、右上の「︙」で戻ります。iPhone・iPad は、Safari の共有ボタンから「ホーム画面に追加」して、そこから開くとアドレスバーが出ません。</div>
+<h3>このソフトのURL</h3>
+<div class="n">スマホやタブレットのカメラで読み取ると、配布ページが開きます。</div>
+<img class="qr" alt="配布ページ（https://pikadrum.github.io/keys/）のQRコード" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 37 37' shape-rendering='crispEdges'%3E%3Crect width='37' height='37' fill='%23fff'/%3E%3Cpath fill='%23000' d='M4 4h7v1h-7zM14 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h2v1h-2zM26 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM12 5h3v1h-3zM16 5h1v1h-1zM18 5h3v1h-3zM23 5h2v1h-2zM26 5h1v1h-1zM32 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM13 6h2v1h-2zM16 6h3v1h-3zM20 6h1v1h-1zM22 6h1v1h-1zM26 6h1v1h-1zM28 6h3v1h-3zM32 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM14 7h1v1h-1zM16 7h4v1h-4zM23 7h2v1h-2zM26 7h1v1h-1zM28 7h3v1h-3zM32 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM18 8h1v1h-1zM21 8h3v1h-3zM26 8h1v1h-1zM28 8h3v1h-3zM32 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM15 9h3v1h-3zM22 9h2v1h-2zM26 9h1v1h-1zM32 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM24 10h1v1h-1zM26 10h7v1h-7zM13 11h1v1h-1zM17 11h2v1h-2zM20 11h2v1h-2zM23 11h1v1h-1zM4 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM16 12h1v1h-1zM18 12h2v1h-2zM21 12h1v1h-1zM23 12h2v1h-2zM28 12h1v1h-1zM31 12h1v1h-1zM4 13h1v1h-1zM6 13h2v1h-2zM9 13h1v1h-1zM11 13h3v1h-3zM15 13h1v1h-1zM18 13h2v1h-2zM24 13h3v1h-3zM29 13h1v1h-1zM32 13h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM10 14h1v1h-1zM12 14h3v1h-3zM16 14h2v1h-2zM22 14h1v1h-1zM24 14h5v1h-5zM30 14h3v1h-3zM8 15h1v1h-1zM13 15h2v1h-2zM19 15h1v1h-1zM21 15h5v1h-5zM27 15h1v1h-1zM31 15h1v1h-1zM4 16h1v1h-1zM9 16h2v1h-2zM14 16h3v1h-3zM20 16h2v1h-2zM25 16h2v1h-2zM29 16h1v1h-1zM31 16h2v1h-2zM4 17h2v1h-2zM7 17h1v1h-1zM9 17h1v1h-1zM14 17h2v1h-2zM17 17h1v1h-1zM19 17h2v1h-2zM24 17h1v1h-1zM26 17h1v1h-1zM29 17h1v1h-1zM32 17h1v1h-1zM5 18h2v1h-2zM8 18h1v1h-1zM10 18h3v1h-3zM18 18h4v1h-4zM26 18h2v1h-2zM29 18h1v1h-1zM31 18h2v1h-2zM5 19h3v1h-3zM9 19h1v1h-1zM11 19h1v1h-1zM16 19h3v1h-3zM20 19h4v1h-4zM25 19h5v1h-5zM31 19h1v1h-1zM5 20h1v1h-1zM7 20h1v1h-1zM10 20h5v1h-5zM16 20h1v1h-1zM18 20h9v1h-9zM29 20h1v1h-1zM31 20h2v1h-2zM11 21h4v1h-4zM18 21h2v1h-2zM24 21h1v1h-1zM26 21h1v1h-1zM29 21h2v1h-2zM32 21h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM9 22h2v1h-2zM13 22h2v1h-2zM16 22h2v1h-2zM21 22h1v1h-1zM25 22h4v1h-4zM31 22h2v1h-2zM5 23h1v1h-1zM7 23h3v1h-3zM12 23h2v1h-2zM15 23h1v1h-1zM20 23h3v1h-3zM24 23h1v1h-1zM27 23h3v1h-3zM31 23h1v1h-1zM4 24h1v1h-1zM10 24h4v1h-4zM19 24h3v1h-3zM24 24h5v1h-5zM12 25h1v1h-1zM17 25h1v1h-1zM23 25h2v1h-2zM28 25h1v1h-1zM30 25h3v1h-3zM4 26h7v1h-7zM14 26h1v1h-1zM16 26h1v1h-1zM18 26h1v1h-1zM21 26h4v1h-4zM26 26h1v1h-1zM28 26h2v1h-2zM31 26h2v1h-2zM4 27h1v1h-1zM10 27h1v1h-1zM13 27h1v1h-1zM16 27h3v1h-3zM21 27h2v1h-2zM24 27h1v1h-1zM28 27h2v1h-2zM31 27h1v1h-1zM4 28h1v1h-1zM6 28h3v1h-3zM10 28h1v1h-1zM12 28h1v1h-1zM14 28h3v1h-3zM18 28h1v1h-1zM21 28h1v1h-1zM24 28h5v1h-5zM32 28h1v1h-1zM4 29h1v1h-1zM6 29h3v1h-3zM10 29h1v1h-1zM13 29h3v1h-3zM17 29h2v1h-2zM20 29h2v1h-2zM23 29h2v1h-2zM27 29h2v1h-2zM30 29h3v1h-3zM4 30h1v1h-1zM6 30h3v1h-3zM10 30h1v1h-1zM12 30h4v1h-4zM17 30h1v1h-1zM23 30h1v1h-1zM27 30h3v1h-3zM32 30h1v1h-1zM4 31h1v1h-1zM10 31h1v1h-1zM16 31h1v1h-1zM19 31h1v1h-1zM21 31h4v1h-4zM26 31h2v1h-2zM31 31h1v1h-1zM4 32h7v1h-7zM12 32h1v1h-1zM14 32h1v1h-1zM18 32h2v1h-2zM21 32h1v1h-1zM24 32h3v1h-3zM28 32h2v1h-2zM31 32h2v1h-2z'/%3E%3C/svg%3E">
 <button id="x">閉じる</button>
-<div id="mi" style="margin-top:6px;color:var(--d)"></div></div>
+<div id="mi" style="margin-top:6px;color:var(--d)"></div>
+<div id="buildInfo" class="n" style="text-align:right;font-size:11px">ビルド 2026/10/24 07:55</div></div>
 <script>
 const $=id=>document.getElementById(id),cv=$('c'),g=cv.getContext('2d');
 let W,H;const rs=()=>{const d=devicePixelRatio||1;W=innerWidth-(window.OFF||0);H=innerHeight;cv.style.left=(innerWidth-W)+'px';cv.style.width=W+'px';cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);layout()};
@@ -129,7 +141,7 @@ if(KR[m]){let[lo,hi]=KR[m];if(sel.length&&hi-lo<60){const sh=Math.round(((mn+mx)
 else setView(Math.max(21,mn-1),Math.min(108,mx+1),m=='play'?10:7)}
 // ---- 設定の保存 ----
 const PK='piano-falls-prefs';let PR={};try{PR=JSON.parse(localStorage.getItem(PK))||{}}catch(e){}
-const sv=()=>{try{localStorage.setItem(PK,JSON.stringify({nn:S.nn,bl:$('bl').checked,zm:$('zm').value,kr:$('kr').value=='man'?undefined:$('kr').value,cm:$('cm').value,mt:$('mt').checked,ci:$('ci').checked,wa:$('wa').value,hd:$('hd').value,sp:S.sp,pv:$('pv').value,vAll:$('vAll').value,vBk:$('vBk').value,vCt:$('vCt').value,vMt:$('vMt').value,mxo:MX.open,snd:$('snd').value,pd:$('pd').checked,sh:$('sh').value,ss:$('ss').value}))}catch(e){}};
+const sv=()=>{try{localStorage.setItem(PK,JSON.stringify({nn:S.nn,bl:$('bl').checked,zm:$('zm').value,kr:$('kr').value=='man'?undefined:$('kr').value,cm:$('cm').value,mt:$('mt').checked,ci:$('ci').checked,wa:$('wa').value,hd:$('hd').value,sp:S.sp,pv:$('pv').value,vAll:$('vAll').value,vBk:$('vBk').value,vCt:$('vCt').value,vMt:$('vMt').value,mxo:MX.open,snd:$('snd').value,pd:$('pd').checked,afs:$('afs').checked,sh:$('sh').value,ss:$('ss').value}))}catch(e){}};
 // ---- 音 ----
 // 音の行き先：各パート→伴奏(bB)、自分の音(bM)、カウント(bC)、メトロノーム(bT)→全体(mg)→出力
 let ac,mg,bM,bB,bC,bT,OUTD;function au(){if(!ac){ac=new AudioContext();mg=ac.createGain();mg.connect(ac.destination);
@@ -206,9 +218,13 @@ const c=mel.sort((a,b)=>b.n-a.n)[0]||(cand.length?cand:S.tr.filter(t=>t.c!=9)).s
 for(const t of S.tr){const nmL=t.name.toLowerCase();t.h=/left|左|l\.?h\b|bass/.test(nmL)?'L':/right|右|r\.?h\b|melody|メロディ/.test(nmL)?'R':t===c?'S':t.avg>=S.sp?'R':'L'}
 S.bt=[...bars.map(t=>({t,d:1})),...beats.map(t=>({t,d:0}))].sort((a,b)=>a.t-b.t);
 S.fk='pf-fing:'+fname+':'+all.length;S.fg={};S.sel=-1;try{S.fg=JSON.parse(localStorage.getItem(S.fk))||{}}catch(e){}
+// 内蔵の練習曲：右手・左手の役目と、書いてある運指（自分で書いた運指がなければ）
+const bs=BI[fname];if(bs){for(const t of S.tr){if(t.name=='右手'){t.m='play';t.h='R'}else if(t.name=='左手'){t.m=bs.pl=='B'?'play':'auto';t.h='L'}}
+if(!Object.keys(S.fg).length){const fm={};for(const[h,tn]of[['R','右手'],['L','左手']])for(const n of scoreLine(bs[h]).ns)if(n.f)fm[tn+':'+Math.round(n.t*480)+':'+n.p]=n.f;
+all.forEach((n,i)=>{const f=fm[S.tr[n.tr].name+':'+n.k+':'+n.p];if(f)S.fg[i]=f})}}
 if($('kr').value=='man')$('kr').value='play';fit();buildSheet();loadSong();S.playing=false;S.pos=0;S.hit=S.miss=0;
 const pn=all.filter(isPlay);if(pn.length)S.kb=Math.max(12,Math.min(96,Math.floor(Math.min(...pn.map(n=>n.p))/12)*12));
-$('pl').textContent='▶';trk();loopUI()}
+$('pl').textContent='▶';trk();loopUI();sgSync()}
 function trk(){$('tl').innerHTML='';S.tr.forEach((t,i)=>{const r=document.createElement('div');r.className='r';
 r.innerHTML=`<i style="background:${COL[i%7]}"></i><span>${t.name}（${t.n}）${t.c==9?' ドラム':''}</span><select><option value="play">演奏<option value="auto">自動<option value="off">消音</select><select><option value="R">右手<option value="L">左手<option value="S">分割</select>`;
 const[s,hs]=r.querySelectorAll('select');s.value=t.m;s.onchange=()=>{t.m=s.value;fit();buildSheet();loadSong();pushState();renderMix()};hs.value=t.h;hs.onchange=()=>{t.h=hs.value;fit();buildSheet();renderMix()};$('tl').appendChild(r)});renderMix()}
@@ -270,7 +286,7 @@ S.sheet=ch;S.sf=sf}
 const MF="'Noto Music','Bravura','Segoe UI Symbol','Apple Symbols','DejaVu Sans',serif";
 function glyph(ch,h,x,top){g.font='100px '+MF;const m=g.measureText(ch),gh=(m.actualBoundingBoxAscent+m.actualBoundingBoxDescent)||100,sc=h/gh;g.font=(100*sc)+'px '+MF;g.textAlign='left';g.textBaseline='alphabetic';g.fillText(ch,x,top+m.actualBoundingBoxAscent*sc)}
 function drawSheet(){S.shB=0;if($('sh').value=='off'||!S.sheet||!S.sheet.length)return;
-const ls=$('ss').value=='l'?10:7,top=$('bar').offsetHeight,H0=21*ls,tT=top+4*ls,bT=tT+9*ls,bB=bT+4*ls,yOf=(st,s)=>(st=='R'?tT:bT)+4*ls-s*ls/2,ink='#222';S.shB=top+H0;
+const ls=($('ss').value=='l'?10:7)*(innerHeight<500?.7:1),top=$('bar').offsetHeight,H0=21*ls,tT=top+4*ls,bT=tT+9*ls,bB=bT+4*ls,yOf=(st,s)=>(st=='R'?tT:bT)+4*ls-s*ls/2,ink='#222';S.shB=top+H0;
 g.fillStyle='#f6f3ea';g.fillRect(0,top,W,H0);g.fillStyle='#00000030';g.fillRect(0,top+H0,W,2);
 const sf=S.sf||0,ts=S.tsl&&S.tsl.length?S.tsl:[[0,4,2]],kNow=S.tickAt(posNow());let tsc=ts[0];for(const x of ts)if(x[0]<=kNow)tsc=x;
 const W0=ls*(5+.9*Math.abs(sf)+2.4),X=W0+ls*2.5,ppb=ls*9,xOf=k=>X+(k-kNow)/S.div*ppb+ls*.8;
@@ -363,7 +379,8 @@ if(!(e.pointerId in ptr))return;const o=ptr[e.pointerId],q=keyAt((e.clientX-OFF)
 const up=e=>{if(pz.has(e.pointerId)){if(tap&&tap.id==e.pointerId&&e.type=='pointerup'&&now()-tap.t<500)tapAt((e.clientX-OFF),e.clientY);tap=null;pz.delete(e.pointerId);if(pz.size==2)pinStart();else pin=null;return}if(!(e.pointerId in ptr))return;const o=ptr[e.pointerId];if(o!=null)lift(o);delete ptr[e.pointerId]};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 function saveFg(){try{localStorage.setItem(S.fk,JSON.stringify(S.fg))}catch(e){}}
 function setFg(i,f){if(f)S.fg[i]=f;else delete S.fg[i];saveFg()}
-function tapAt(x,y){if(!$('fe').checked||y<S.shB)return;let hit=-1;for(const r of S.rects)if(x>=r[0]-3&&x<=r[0]+r[2]+3&&y>=r[1]&&y<=r[1]+r[3])hit=r[4];
+function setBar(h){S.bh=h;$('bar').classList.toggle('hid',h);$('bs').hidden=!h;mxPlace()}
+function tapAt(x,y){if(!$('fe').checked||y<S.shB){if(innerHeight<500||S.bh)setBar(!S.bh);return}let hit=-1;for(const r of S.rects)if(x>=r[0]-3&&x<=r[0]+r[2]+3&&y>=r[1]&&y<=r[1]+r[3])hit=r[4];
 if(hit<0){S.sel=-1;return}if(S.sel==hit||'ontouchstart'in window){const f=(S.fg[hit]||0)+1;setFg(hit,f>5?0:f)}S.sel=hit}
 cv.addEventListener('wheel',e=>{e.preventDefault();const dx=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:0;
 if(e.shiftKey||dx){S.wl+=(dx||e.deltaY)/S.ww*.5}else{const cw=S.wl+(e.clientX-OFF)/S.ww;S.nw*=Math.exp(e.deltaY*.0015);clampView();S.wl=cw-(e.clientX-OFF)/(W/S.nw)}clampView();layout();setMan()},{passive:false});
@@ -464,6 +481,117 @@ $('dl').onchange=e=>{DLY=+e.target.value||0};
 setInterval(()=>{if(S.playing&&!S.waiting&&leader===ID&&S.len){const m=stateMsg();m.type='tick';send(m)}},1000);
 setInterval(()=>send(mk('ping',{plays:plays()})),2000);
 addEventListener('pagehide',()=>send(mk('bye')));
+// ---- 内蔵の練習曲（ピアノ）----
+// 書き方：音名＋オクターブ（C4＝真ん中のド、#・b）、和音は「+」、休みは r。「/長さ」は4分音符を1とした拍の数（省くと前と同じ）。「@指番号」。「|」は小節線
+// pl：最初に「演奏」にする手（R＝右手だけ、B＝両手）。著作権の切れた曲は、このソフト用のやさしい編曲。（オリジナル）はこのソフトのための曲
+const LV=['','はじめて（右手だけ・5つの音）','右手を広く（付点・8分音符）','両手で（左手は1音ずつ）','左手の和音・分散和音','中級の入り口（16分音符・両手が動く）'];
+const SONGS=[
+// ===== レベル1 =====
+{lv:1,t:'ホット・クロス・バン',bpm:80,ts:[4,4],pl:'R',
+R:'E4/2@3 D4@2 | C4/4@1 | E4/2@3 D4@2 | C4/4@1 | C4/.5@1 C4@1 C4@1 C4@1 D4@2 D4@2 D4@2 D4@2 | E4/2@3 D4@2 | C4/4@1',
+L:'C3/2 G2 | C3/4 | C3/2 G2 | C3/4 | C3/2 G2 | C3/2 G2 | C3/4'},
+{lv:1,t:'メリーさんのひつじ',bpm:90,ts:[4,4],pl:'R',
+R:'E4/1@3 D4@2 C4@1 D4@2 | E4@3 E4@3 E4/2@3 | D4/1@2 D4@2 D4/2@2 | E4/1@3 G4@5 G4/2@5 | E4/1@3 D4@2 C4@1 D4@2 | E4@3 E4@3 E4@3 E4@3 | D4@2 D4@2 E4@3 D4@2 | C4/4@1',
+L:'C3/4 | C3/4 | G2/4 | C3/4 | C3/4 | C3/4 | G2/4 | C3/4'},
+{lv:1,t:'ちょうちょう',bpm:90,ts:[4,4],pl:'R',
+R:'G4/1@5 E4@3 E4/2@3 | F4/1@4 D4@2 D4/2@2 | C4/1@1 D4@2 E4@3 F4@4 | G4@5 G4@5 G4/2@5 | G4/1@5 E4@3 E4@3 E4@3 | F4@4 D4@2 D4@2 D4@2 | C4@1 E4@3 G4@5 G4@5 | E4@3 E4@3 E4/2@3 | D4/1@2 D4@2 D4@2 D4@2 | D4@2 E4@3 F4/2@4 | E4/1@3 E4@3 E4@3 E4@3 | E4@3 F4@4 G4/2@5 | G4/1@5 E4@3 E4/2@3 | F4/1@4 D4@2 D4/2@2 | C4/1@1 E4@3 G4@5 G4@5 | C4/4@1',
+L:'C3/4 | G2/4 | C3/4 | C3/4 | C3/4 | G2/4 | C3/4 | C3/4 | G2/4 | G2/4 | C3/4 | C3/4 | C3/4 | G2/4 | C3/4 | C3/4'},
+{lv:1,t:'かえるの合唱',bpm:90,ts:[4,4],pl:'R',
+R:'C4/1@1 D4@2 E4@3 F4@4 | E4@3 D4@2 C4/2@1 | E4/1@2 F4@3 G4@4 A4@5 | G4@4 F4@3 E4/2@2 | C4/2@1 C4@1 | C4@1 C4@1 | C4/.5@1 C4@1 D4@2 D4@2 E4@3 E4@3 F4@4 F4@4 | E4/1@3 D4@2 C4/2@1',
+L:'C3/4 | G2/2 C3 | C3/4 | G2/2 C3 | C3/4 | C3/4 | C3/2 G2 | G2/2 C3'},
+{lv:1,t:'きらきら星',bpm:85,ts:[4,4],pl:'R',
+R:'C4/1 C4 G4 G4 | A4 A4 G4/2 | F4/1 F4 E4 E4 | D4 D4 C4/2 | G4/1 G4 F4 F4 | E4 E4 D4/2 | G4/1 G4 F4 F4 | E4 E4 D4/2 | C4/1 C4 G4 G4 | A4 A4 G4/2 | F4/1 F4 E4 E4 | D4 D4 C4/2',
+L:'C3/4 | F2/2 C3 | F2/2 C3 | G2/2 C3 | C3/2 F2 | C3/2 G2 | C3/2 F2 | C3/2 G2 | C3/4 | F2/2 C3 | F2/2 C3 | G2/2 C3'},
+// ===== レベル2 =====
+{lv:2,t:'よろこびの歌（ベートーヴェン）',bpm:100,ts:[4,4],pl:'R',
+R:'E4/1@3 E4@3 F4@4 G4@5 | G4@5 F4@4 E4@3 D4@2 | C4@1 C4@1 D4@2 E4@3 | E4/1.5@3 D4/.5@2 D4/2@2 | E4/1@3 E4@3 F4@4 G4@5 | G4@5 F4@4 E4@3 D4@2 | C4@1 C4@1 D4@2 E4@3 | D4/1.5@2 C4/.5@1 C4/2@1 | D4/1@2 D4@2 E4@3 C4@1 | D4/1@2 E4/.5@3 F4@4 E4/1@3 C4@1 | D4/1@2 E4/.5@3 F4@4 E4/1@3 D4@2 | C4/1@1 D4@2 G3/2 | E4/1@3 E4@3 F4@4 G4@5 | G4@5 F4@4 E4@3 D4@2 | C4@1 C4@1 D4@2 E4@3 | D4/1.5@2 C4/.5@1 C4/2@1',
+L:'C3/4 | C3/2 G2 | C3/4 | G2/4 | C3/4 | C3/2 G2 | C3/4 | G2/2 C3 | G2/2 C3 | G2/2 C3 | G2/4 | C3/2 G2 | C3/4 | C3/2 G2 | C3/4 | G2/2 C3'},
+{lv:2,t:'ロンドン橋',bpm:100,ts:[4,4],pl:'R',
+R:'G4/1.5 A4/.5 G4/1 F4 | E4 F4 G4/2 | D4/1 E4 F4/2 | E4/1 F4 G4/2 | G4/1.5 A4/.5 G4/1 F4 | E4 F4 G4/2 | D4/2 G4 | E4/1 C4/3',
+L:'C3/4 | C3/4 | G2/4 | C3/4 | C3/4 | C3/4 | G2/4 | C3/4'},
+{lv:2,t:'ジングルベル',bpm:110,ts:[4,4],pl:'R',
+R:'E4/1 E4 E4/2 | E4/1 E4 E4/2 | E4/1 G4 C4/1.5 D4/.5 | E4/4 | F4/1 F4 F4/1.5 F4/.5 | F4/1 E4 E4 E4/.5 E4 | E4/1 D4 D4 E4 | D4/2 G4 | E4/1 E4 E4/2 | E4/1 E4 E4/2 | E4/1 G4 C4/1.5 D4/.5 | E4/4 | F4/1 F4 F4 F4 | F4/1 E4 E4 E4/.5 E4 | G4/1 G4 F4 D4 | C4/4',
+L:'C3/4 | C3/4 | C3/4 | C3/4 | F2/4 | C3/4 | G2/4 | G2/4 | C3/4 | C3/4 | C3/4 | C3/4 | F2/4 | C3/4 | G2/4 | C3/4'},
+{lv:2,t:'聖者の行進',bpm:110,ts:[4,4],pl:'R',
+R:'r/1 C4 E4 F4 | G4/4 | r/1 C4 E4 F4 | G4/4 | r/1 C4 E4 F4 | G4/2 E4 | C4/2 E4 | D4/4 | r/1 E4 E4 D4 | C4/3 C4/1 | E4/2 G4 | G4/1 F4/3 | r/1 E4 F4 G4 | E4/2 C4 | D4/4 | C4/4',
+L:'C3/4 | C3/4 | C3/4 | C3/4 | C3/4 | C3/4 | C3/4 | G2/4 | C3/4 | C3/4 | C3/4 | G2/4 | C3/4 | C3/4 | G2/4 | C3/4'},
+{lv:2,t:'はじめてのワルツ（オリジナル）',bpm:110,ts:[3,4],pl:'R',
+R:'E4/2 D4/1 | C4/2 E4/1 | G4/2 F4/1 | E4/3 | D4/2 E4/1 | F4/2 D4/1 | E4/2 C4/1 | D4/3 | E4/2 D4/1 | C4/2 E4/1 | G4/2 A4/1 | G4/3 | F4/1 E4 D4 | G4/2 B3/1 | C4/3 | C4/3',
+L:'C3/1 E3+G3 E3+G3 | C3/1 E3+G3 E3+G3 | C3/1 E3+G3 E3+G3 | C3/1 E3+G3 E3+G3 | G2/1 B2+F3 B2+F3 | G2/1 B2+F3 B2+F3 | C3/1 E3+G3 E3+G3 | G2/1 B2+F3 B2+F3 | C3/1 E3+G3 E3+G3 | C3/1 E3+G3 E3+G3 | F2/1 A2+C3 A2+C3 | C3/1 E3+G3 E3+G3 | G2/1 B2+F3 B2+F3 | G2/1 B2+F3 B2+F3 | C3/1 E3+G3 E3+G3 | C3/3'},
+// ===== レベル3 =====
+{lv:3,t:'よろこびの歌（両手）',bpm:100,ts:[4,4],pl:'B',
+R:'E4/1@3 E4@3 F4@4 G4@5 | G4@5 F4@4 E4@3 D4@2 | C4@1 C4@1 D4@2 E4@3 | E4/1.5@3 D4/.5@2 D4/2@2 | E4/1@3 E4@3 F4@4 G4@5 | G4@5 F4@4 E4@3 D4@2 | C4@1 C4@1 D4@2 E4@3 | D4/1.5@2 C4/.5@1 C4/2@1 | D4/1 D4 E4 C4 | D4/1 E4/.5 F4 E4/1 C4 | D4/1 E4/.5 F4 E4/1 D4 | C4/1 D4 G3/2 | E4/1 E4 F4 G4 | G4 F4 E4 D4 | C4 C4 D4 E4 | D4/1.5 C4/.5 C4/2',
+L:'C3/2@5 E3@3 | G3/2@1 D3@4 | C3/2@5 E3@3 | G3/2@1 D3@4 | C3/2@5 E3@3 | G3/2@1 D3@4 | C3/2@5 E3@3 | G3/2@1 C3@5 | G3/2@1 E3@3 | G3/2@1 C3@5 | G3/2@1 D3@4 | E3/2@3 D3@4 | C3/2@5 E3@3 | G3/2@1 D3@4 | C3/2@5 E3@3 | G3/2@1 C3@5'},
+{lv:3,t:'メヌエット ト長調（ペツォールト）',bpm:100,ts:[3,4],ks:1,pl:'B',
+R:'D5/1 G4/.5 A4 B4 C5 | D5/1 G4/1 G4 | E5/1 C5/.5 D5 E5 F#5 | G5/1 G4/1 G4 | C5/1 D5/.5 C5 B4 A4 | B4/1 C5/.5 B4 A4 G4 | F#4/1 G4/.5 A4 B4 G4 | A4/3 | D5/1 G4/.5 A4 B4 C5 | D5/1 G4/1 G4 | E5/1 C5/.5 D5 E5 F#5 | G5/1 G4/1 G4 | C5/1 D5/.5 C5 B4 A4 | B4/1 C5/.5 B4 A4 G4 | A4/1 B4/.5 A4 G4 F#4 | G4/3',
+L:'G3/3 | B3/3 | C4/3 | B3/3 | A3/3 | G3/3 | D3/3 | D3/3 | G3/3 | B3/3 | C4/3 | B3/3 | A3/3 | G3/3 | D3/3 | G2/3'},
+{lv:3,t:'きよしこの夜（グルーバー）',bpm:90,ts:[3,4],pl:'B',
+R:'G4/1.5 A4/.5 G4/1 | E4/3 | G4/1.5 A4/.5 G4/1 | E4/3 | D5/2 D5/1 | B4/3 | C5/2 C5/1 | G4/3 | A4/2 A4/1 | C5/1.5 B4/.5 A4/1 | G4/1.5 A4/.5 G4/1 | E4/3 | A4/2 A4/1 | C5/1.5 B4/.5 A4/1 | G4/1.5 A4/.5 G4/1 | E4/3 | D5/2 D5/1 | F5/1.5 D5/.5 B4/1 | C5/3 | E5/3 | C5/1.5 G4/.5 E4/1 | G4/1.5 F4/.5 D4/1 | C4/3',
+L:'C3/3 | C3/3 | C3/3 | C3/3 | G2/3 | G2/3 | C3/3 | C3/3 | F2/3 | F2/3 | C3/3 | C3/3 | F2/3 | F2/3 | C3/3 | C3/3 | G2/3 | G2/3 | C3/3 | C3/3 | C3/3 | G2/3 | C3/3'},
+{lv:3,t:'朝の散歩（オリジナル）',bpm:100,ts:[4,4],pl:'B',
+R:'C4/1 E4 G4 E4 | F4 A4 G4/2 | E4/1 G4 C5 B4 | A4/2 G4 | F4/1 A4 G4 E4 | D4 E4 F4 D4 | C4/1 E4 D4 B3 | C4/4 | E4/.5 F4 G4/1 G4 A4 | G4/1 F4 E4/2 | D4/.5 E4 F4/1 F4 G4 | F4/1 E4 D4/2 | C4/1 E4 G4 C5 | A4/1 F4 D4 G4 | E4/1 D4 C4 B3 | C4/4',
+L:'C3/2 G3 | F3/2 E3 | C3/2 G3 | F3/2 E3 | F3/2 E3 | D3/4 | E3/2 D3 | C3/4 | C3/2 E3 | D3/2 E3 | D3/4 | G3/2 D3 | C3/2 E3 | F3/2 D3 | E3/2 D3 | C3/4'},
+{lv:3,t:'雨上がりのワルツ（オリジナル）',bpm:120,ts:[3,4],pl:'B',
+R:'A4/2 C5/1 | B4/2 A4/1 | G#4/2 B4/1 | A4/3 | E4/2 A4/1 | C5/2 E5/1 | D5/2 C5/1 | B4/3 | C5/2 B4/1 | A4/2 G4/1 | F4/2 A4/1 | E4/3 | D5/1 C5 B4 | C5/2 E4/1 | B4/2 G#4/1 | A4/3',
+L:'A2/3 | A2/3 | E2/3 | A2/3 | A2/3 | C3/3 | D3/3 | E2/3 | A2/3 | C3/3 | F2/3 | E2/3 | D3/3 | A2/3 | E2/3 | A2/3'},
+// ===== レベル4 =====
+{lv:4,t:'エリーゼのために（ベートーヴェン・はじめの部分）',bpm:66,ts:[3,8],pl:'B',
+R:'E5/.25 D#5 | E5 D#5 E5 B4 D5 C5 | A4/.5 r/.25 C4 E4 A4 | B4/.5 r/.25 E4 G#4 B4 | C5/.5 r/.25 E4 E5 D#5 | E5 D#5 E5 B4 D5 C5 | A4/.5 r/.25 C4 E4 A4 | B4/.5 r/.25 E4 C5 B4 | A4/.5 r/.5 E5/.25 D#5 | E5 D#5 E5 B4 D5 C5 | A4/.5 r/.25 C4 E4 A4 | B4/.5 r/.25 E4 G#4 B4 | C5/.5 r/.25 E4 E5 D#5 | E5 D#5 E5 B4 D5 C5 | A4/.5 r/.25 C4 E4 A4 | B4/.5 r/.25 E4 C5 B4 | A4/1.5',
+L:'r/.5 | r/1.5 | A2/.25 E3 A3 r/.75 | E2/.25 E3 G#3 r/.75 | A2/.25 E3 A3 r/.75 | r/1.5 | A2/.25 E3 A3 r/.75 | E2/.25 E3 G#3 r/.75 | A2/.25 E3 A3 r/.75 | r/1.5 | A2/.25 E3 A3 r/.75 | E2/.25 E3 G#3 r/.75 | A2/.25 E3 A3 r/.75 | r/1.5 | A2/.25 E3 A3 r/.75 | E2/.25 E3 G#3 r/.75 | A2/.25 E3 A3/1'},
+{lv:4,t:'カノン（パッヘルベル）',bpm:72,ts:[4,4],ks:2,pl:'B',
+R:'F#5/2 E5 | D5/2 C#5 | B4/2 A4 | B4/2 C#5 | D5/2 C#5 | B4/2 A4 | G4/2 F#4 | G4/2 E4 | D4/1 F#4 A4 G4 | F#4 D4 F#4 E4 | D4 B3 D4 A4 | G4 B4 A4 G4 | F#4/2 E4 | D4/4',
+L:'D3+A3/2 A2+E3 | B2+F#3/2 F#2+C#3 | G2+D3/2 D2+A2 | G2+D3/2 A2+E3 | D3+A3/2 A2+E3 | B2+F#3/2 F#2+C#3 | G2+D3/2 D2+A2 | G2+D3/2 A2+E3 | D3+A3/2 A2+E3 | B2+F#3/2 F#2+C#3 | G2+D3/2 D2+A2 | G2+D3/2 A2+E3 | D3+A3/2 A2+E3 | D3+A3/4'},
+{lv:4,t:'グリーンスリーブス（イングランド民謡）',bpm:100,ts:[3,4],pl:'B',
+R:'A4/1 | C5/2 D5/1 | E5/1.5 F5/.5 E5/1 | D5/2 B4/1 | G4/1.5 A4/.5 B4/1 | C5/2 A4/1 | A4/1.5 G#4/.5 A4/1 | B4/2 G#4/1 | E4/2 A4/1 | C5/2 D5/1 | E5/1.5 F5/.5 E5/1 | D5/2 B4/1 | G4/1.5 A4/.5 B4/1 | C5/1.5 B4/.5 A4/1 | G#4/1.5 F#4/.5 G#4/1 | A4/3 | G5/3 | G5/1.5 F#5/.5 E5/1 | D5/2 B4/1 | G4/1.5 A4/.5 B4/1 | C5/2 A4/1 | A4/1.5 G#4/.5 A4/1 | B4/2 G#4/1 | E4/3 | G5/3 | G5/1.5 F#5/.5 E5/1 | D5/2 B4/1 | G4/1.5 A4/.5 B4/1 | C5/1.5 B4/.5 A4/1 | G#4/1.5 F#4/.5 G#4/1 | A4/3',
+L:'r/1 | A2/1 E3 A3 | C3/1 G3 C4 | G2/1 D3 G3 | E2/1 B2 E3 | A2/1 E3 A3 | E2/1 B2 G#3 | E2/1 B2 G#3 | E2/1 B2 G#3 | A2/1 E3 A3 | C3/1 G3 C4 | G2/1 D3 G3 | E2/1 B2 E3 | A2/1 E3 A3 | E2/1 B2 G#3 | A2/1 E3 A3 | C3/1 G3 C4 | C3/1 G3 C4 | G2/1 D3 G3 | E2/1 B2 E3 | A2/1 E3 A3 | E2/1 B2 G#3 | E2/1 B2 G#3 | E2/1 B2 G#3 | C3/1 G3 C4 | C3/1 G3 C4 | G2/1 D3 G3 | E2/1 B2 E3 | A2/1 E3 A3 | E2/1 B2 G#3 | A2/3'},
+{lv:4,t:'月のワルツ（オリジナル）',bpm:120,ts:[3,4],ks:1,pl:'B',
+R:'B4/2 D5/1 | G5/2 F#5/1 | E5/2 D5/1 | B4/3 | C5/2 E5/1 | D5/2 B4/1 | A4/2 G4/1 | A4/3 | B4/2 D5/1 | G5/2 B5/1 | A5/2 G5/1 | E5/3 | D5/1 C5 B4 | A4/2 C5/1 | B4/2 A4/1 | G4/3',
+L:'G2/1 B2+D3 B2+D3 | G2/1 B2+D3 B2+D3 | C3/1 E3+G3 E3+G3 | G2/1 B2+D3 B2+D3 | C3/1 E3+G3 E3+G3 | G2/1 B2+D3 B2+D3 | D3/1 F#3+A3 F#3+A3 | D3/1 F#3+A3 F#3+A3 | G2/1 B2+D3 B2+D3 | E3/1 G3+B3 G3+B3 | A2/1 C3+E3 C3+E3 | C3/1 E3+G3 E3+G3 | G2/1 B2+D3 B2+D3 | D3/1 F#3+A3 F#3+A3 | D3/1 F#3+A3 F#3+A3 | G2/3'},
+{lv:4,t:'春のロンド（オリジナル）',bpm:96,ts:[4,4],pl:'B',
+R:'E5/1 C5 G4 C5 | D5/1.5 C5/.5 B4/2 | F5/1 D5 B4 D5 | E5/1.5 D5/.5 C5/2 | A4/1 C5 F5 E5 | D5/1 C5 B4 A4 | G4/1 C5 E5 D5 | C5/4 | G5/.5 F5 E5 D5 C5/1 E5 | F5/.5 E5 D5 C5 B4/2 | A4/.5 B4 C5 D5 E5/1 C5 | D5/2 G4 | E5/1 C5 G4 C5 | D5/1.5 C5/.5 B4/2 | C5/1 E5 D5 B4 | C5/4',
+L:'C3/.5 G3 E3 G3 C3 G3 E3 G3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | F2/.5 C3 A2 C3 F2 C3 A2 C3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | F2/.5 C3 A2 C3 C3 G3 E3 G3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 G2 D3 B2 D3 | C3+E3+G3/4'},
+// ===== レベル5 =====
+{lv:5,t:'トルコ行進曲（モーツァルト・はじめの部分）',bpm:112,ts:[2,4],pl:'B',
+R:'B4/.25 A4 G#4 A4 | C5/.5 r D5/.25 C5 B4 C5 | E5/.5 r F5/.25 E5 D#5 E5 | B5/.25 A5 G#5 A5 B5 A5 G#5 A5 | C6/1 A5/.5 C6 | B5/.5 A5 G5 A5 | B5 A5 G5 A5 | B5 A5 G5 F#5 | E5/1 B4/.25 A4 G#4 A4 | C5/.5 r D5/.25 C5 B4 C5 | E5/.5 r F5/.25 E5 D#5 E5 | B5/.25 A5 G#5 A5 B5 A5 G#5 A5 | C6/1 A5/.5 C6 | B5/.5 A5 G5 A5 | B5 A5 G5 A5 | B5 A5 G5 F#5 | E5/.5 A5 E5 C5 | A4/2',
+L:'r/1 | A3/.5 C4+E4 C4+E4 C4+E4 | A3 C4+E4 C4+E4 C4+E4 | A3 C4+E4 A3 C4+E4 | A3 C4+E4 C4+E4 C4+E4 | E3 G3+B3 G3+B3 G3+B3 | E3 G3+B3 G3+B3 G3+B3 | B2 D#3+A3 D#3+A3 D#3+A3 | E3/.5 G#3+B3 E3/1 | A3/.5 C4+E4 C4+E4 C4+E4 | A3 C4+E4 C4+E4 C4+E4 | A3 C4+E4 A3 C4+E4 | A3 C4+E4 C4+E4 C4+E4 | E3 G3+B3 G3+B3 G3+B3 | E3 G3+B3 G3+B3 G3+B3 | B2 D#3+A3 D#3+A3 D#3+A3 | A3 C4+E4 A3 C4+E4 | A2+A3/2'},
+{lv:5,t:'風のエチュード（オリジナル）',bpm:100,ts:[4,4],pl:'B',
+R:'C5/.25 D5 E5 F5 G5 F5 E5 D5 C5/.5 E5 G5/1 | F5/.25 E5 D5 C5 B4 C5 D5 B4 G4/1 G4 | A4/.25 B4 C5 D5 E5 F5 G5 A5 G5/.5 F5 E5 D5 | C5/2 E5/1 C5 | D5/.25 E5 F5 G5 A5 G5 F5 E5 D5/.5 F5 A5/1 | G5/.25 F5 E5 D5 C5 D5 E5 C5 G4/1 C5 | D5/.25 C5 B4 C5 D5 E5 F5 D5 B4/.5 G4 B4 D5 | C5/2 G4 | C5/.25 D5 E5 F5 G5 F5 E5 D5 C5/.5 E5 G5/1 | F5/.25 E5 D5 C5 B4 C5 D5 B4 G4/1 G4 | A4/.25 B4 C5 D5 E5 F5 G5 A5 G5/.5 F5 E5 D5 | C5/2 E5/1 C5 | D5/.25 E5 F5 G5 A5 G5 F5 E5 D5/.5 F5 A5/1 | G5/.25 F5 E5 D5 C5 D5 E5 C5 G4/1 C5 | D5/.25 C5 B4 C5 D5 E5 F5 D5 B4/.5 G4 B4 D5 | C5+E5/4',
+L:'C3/.5 G3 E3 G3 C3 G3 E3 G3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | F2/.5 C3 A2 C3 F2 C3 A2 C3 | C3/.5 G3 E3 G3 C3/2 | D3/.5 A3 F3 A3 D3 A3 F3 A3 | C3/.5 G3 E3 G3 E3 G3 C3 G3 | G2/.5 D3 B2 D3 G2 D3 F3 D3 | C3/2 G2 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | G2/.5 D3 B2 D3 G2 D3 B2 D3 | F2/.5 C3 A2 C3 F2 C3 A2 C3 | C3/.5 G3 E3 G3 C3/2 | D3/.5 A3 F3 A3 D3 A3 F3 A3 | C3/.5 G3 E3 G3 E3 G3 C3 G3 | G2/.5 D3 B2 D3 G2 D3 F3 D3 | C3+G3/4'},
+{lv:5,t:'夕暮れのノクターン（オリジナル）',bpm:72,ts:[3,4],ks:-1,pl:'B',
+R:'A4/2 C5/1 | F5/2 E5/.5 D5 | D5/2 C5/1 | A4/3 | Bb4/2 D5/1 | C5/1.5 A4/.5 F4/1 | G4/2 A4/.5 Bb4 | C5/3 | A4/2 C5/1 | F5/2 A5/1 | G5/1.5 F5/.5 D5/1 | E5/3 | D5/1 C5 Bb4 | A4/1.5 C5/.5 F5/1 | G5/2 E5/1 | F5/3',
+L:'F2/.5 C3 A3 C4 A3 C3 | F2 C3 A3 C4 A3 C3 | Bb2 F3 D4 F4 D4 F3 | F2 C3 A3 C4 A3 C3 | G2 D3 Bb3 D4 Bb3 D3 | F2 C3 A3 C4 A3 C3 | C3 G3 C4 E4 C4 G3 | C3 G3 Bb3 E4 Bb3 G3 | F2 C3 A3 C4 A3 C3 | D3 A3 D4 F4 D4 A3 | G2 D3 Bb3 D4 Bb3 D3 | C3 G3 E4 G4 E4 G3 | Bb2 F3 D4 F4 D4 F3 | F2 C3 A3 C4 A3 C3 | C3 G3 Bb3 E4 Bb3 G3 | F2+C3+A3/3'},
+{lv:5,t:'行進曲（オリジナル）',bpm:108,ts:[4,4],ks:1,pl:'B',
+R:'G4+B4/1.5 A4+C5/.5 B4+D5/1 G4+B4 | D5/1.5 C5/.5 B4/1 A4 | G4+B4/1.5 A4+C5/.5 B4+D5/1 D5 | E5/1 D5 C5 B4 | C5+E5/1.5 B4+D5/.5 A4+C5/1 C5+E5 | B4+D5/1.5 A4+C5/.5 G4+B4/2 | A4/1 B4/.5 C5 D5/1 F#4 | G4+B4/2 r | G4+B4/1.5 A4+C5/.5 B4+D5/1 G4+B4 | D5/1.5 C5/.5 B4/1 A4 | G4+B4/1.5 A4+C5/.5 B4+D5/1 D5 | E5/1 D5 C5 B4 | C5+E5/1.5 B4+D5/.5 A4+C5/1 C5+E5 | B4+D5/1.5 A4+C5/.5 G4+B4/2 | A4/1 B4/.5 C5 D5/1 F#4 | G4+B4+D5/2 r',
+L:'G2/1 B2+D3 D2 B2+D3 | G2/1 B2+D3 D2 A2+C3 | G2/1 B2+D3 D2 B2+D3 | C3/1 E3+G3 G2 B2+D3 | C3/1 E3+G3 G2 E3+G3 | G2/1 B2+D3 D2 B2+D3 | D3/1 F#3+C4 A2 F#3+C4 | G2/1 B2+D3 G2/2 | G2/1 B2+D3 D2 B2+D3 | G2/1 B2+D3 D2 A2+C3 | G2/1 B2+D3 D2 B2+D3 | C3/1 E3+G3 G2 B2+D3 | C3/1 E3+G3 G2 E3+G3 | G2/1 B2+D3 D2 B2+D3 | D3/1 F#3+C4 A2 F#3+C4 | G2+D3+G3/2 r'},
+{lv:5,t:'きらめきのソナチネ（オリジナル）',bpm:116,ts:[4,4],pl:'B',
+R:'C5/1 E5 G5/2 | B4/.5 C5 D5 B4 G4/2 | E5/.25 D5 C5 D5 E5 F5 G5 E5 C5/2 | D5/.25 C5 B4 C5 D5 E5 F5 D5 B4/2 | A5/1 F5 C5/.5 D5 E5 F5 | G5/1 E5 C5/2 | F5/.25 E5 D5 C5 B4 C5 D5 B4 G4/.5 A4 B4 G4 | C5/2 G4 | A4/.5 C5 E5 A5 G5 E5 C5 E5 | F5/.5 E5 D5 C5 B4 D5 G5 F5 | E5/.25 G5 F5 E5 D5 F5 E5 D5 C5/.5 E5 D5 B4 | C5+E5/4',
+L:'C3/.5 G3 E3 G3 C3 G3 E3 G3 | B2/.5 G3 D3 G3 B2 G3 D3 G3 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | B2/.5 G3 D3 G3 B2 G3 D3 G3 | A2/.5 F3 C3 F3 A2 F3 C3 F3 | C3/.5 G3 E3 G3 C3 G3 E3 G3 | F2/.5 D3 A2 D3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 G2 D3 B2 D3 | A2/.5 E3 C3 E3 C3 G3 E3 G3 | F2/.5 C3 A2 C3 G2 D3 B2 D3 | C3/.5 G3 E3 G3 G2 D3 B2 D3 | C3+G3/4'},
+];
+// 書いた曲を音の並びにする
+const NT={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+function pnum(s){const m=/^([A-G])(#|b)?(-?\d)$/.exec(s);if(!m)throw Error('音名がおかしい: '+s);return 12*(+m[3]+1)+NT[m[1]]+(m[2]=='#'?1:m[2]=='b'?-1:0)}
+function scoreLine(str){let t=0,d=1,b0=0;const ns=[],bars=[];
+for(const tok of str.trim().split(/\s+/)){if(tok=='|'){bars.push(t-b0);b0=t;continue}
+const m=/^([^/@]+)(?:\/([\d.]+))?(?:@(\d))?$/.exec(tok);if(!m)throw Error('書き方がおかしい: '+tok);if(m[2])d=+m[2];
+if(m[1]!='r')for(const p of m[1].split('+'))ns.push({t,d,p:pnum(p),f:m[3]?+m[3]:0});t+=d}
+bars.push(t-b0);return{ns,bars,len:t}}
+// 小さなMIDIファイルを作る（フォーマット1：0＝情報、1＝右手、2＝左手）
+function songMidi(s){const D=480,vl=n=>{const b=[n&127];n>>=7;while(n){b.unshift(n&127|128);n>>=7}return b},
+trk=evs=>{evs.sort((a,b)=>a[0]-b[0]||a[2]-b[2]);let t=0;const out=[];for(const[tk,bytes]of evs){out.push(...vl(tk-t),...bytes);t=tk}out.push(0,255,47,0);return[77,84,114,107,out.length>>>24&255,out.length>>16&255,out.length>>8&255,out.length&255,...out]},
+txt=(ty,s)=>{const b=[...new TextEncoder().encode(s)];return[255,ty,...vl(b.length),...b]},us=Math.round(6e7/s.bpm);
+const meta=[[0,txt(3,s.t),0],[0,[255,81,3,us>>16&255,us>>8&255,us&255],0],[0,[255,88,4,s.ts[0],Math.log2(s.ts[1]),24,8],0],[0,[255,89,2,(s.ks||0)&255,0],0]];
+const part=(name,ch,line,vel)=>{const e=[[0,txt(3,name),0],[0,[192|ch,0],0]];for(const n of scoreLine(line).ns){const a=Math.round(n.t*D),b=Math.round((n.t+n.d)*D)-8;e.push([a,[144|ch,n.p,vel],1],[b,[128|ch,n.p,0],0])}return e};
+const lv=s.pl=='R'?62:78,trks=[trk(meta),trk(part('右手',0,s.R,92)),trk(part('左手',1,s.L,lv))];
+return new Uint8Array([77,84,104,100,0,0,0,6,0,1,0,trks.length,D>>8,D&255,...trks.flat()]).buffer}
+const songName=(s,i)=>'Lv'+s.lv+'-'+(SONGS.filter((x,j)=>x.lv==s.lv&&j<i).length+1)+' '+s.t;
+const BI={};SONGS.forEach((s,i)=>BI[songName(s,i)]=s);
+// 曲を選ぶ欄
+function sgBuild(){const g=$('sg');g.innerHTML='';g.add(new Option('🎵 曲を選ぶ',''));g.add(new Option('📂 MIDIファイルを開く…','__f'));
+for(let lv=1;lv<=5;lv++){const og=document.createElement('optgroup');og.label='レベル'+lv+'　'+LV[lv];SONGS.forEach((s,i)=>{if(s.lv==lv)og.appendChild(new Option(songName(s,i),i))});g.appendChild(og)}}
+function sgSync(){const g=$('sg'),i=SONGS.findIndex((s,j)=>songName(s,j)==fname);if(i>=0){g.value=i;g.options[0].text='🎵 曲を選ぶ'}else{g.options[0].text=fname?'🎵 '+fname:'🎵 曲を選ぶ';g.value=''}}
+const toB64=u=>{let s='';for(let i=0;i<u.length;i+=32768)s+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(s)};
+function openBuiltin(i){const s=SONGS[i],buf=songMidi(s);if(S.playing)stopP(posNow());b64=toB64(new Uint8Array(buf));fname=songName(s,i);load(buf);pushState();pushSong()}
+sgBuild();$('sg').onchange=()=>{const v=$('sg').value;if(v=='__f'){sgSync();$('f').value='';$('f').click()}else if(v!=='')openBuiltin(+v);$('sg').blur()};
 // ---- UI ----
 function addRecent(){if(!b64||b64.length>600000)return;let l=[];try{l=JSON.parse(localStorage.getItem('pf-recent'))||[]}catch(e){}
 l=l.filter(x=>!(x.name==fname&&x.data.length==b64.length));l.unshift({name:fname,data:b64,len:S.len,n:S.notes.length,at:Date.now()});l=l.slice(0,10);
@@ -484,12 +612,25 @@ $('tp').onchange=()=>{const v=+$('tp').value;S.tp=v;for(const n of S.notes)n.p=M
 for(const id of['vAll','pv','vBk','vCt','vMt']){$(id).oninput=()=>{mixApply();mixTop()};$(id).onchange=sv}
 for(const b of document.querySelectorAll('#mx .mb'))b.onclick=()=>{const k=b.dataset.m;if(k=='ci'||k=='mt'){$(k).checked=!$(k).checked;sv()}else MX.mu[k]=!MX.mu[k];mixApply();mixTop()};
 $('mxr').onclick=()=>{for(const t of S.tr){t.vol=100;t.mu=t.so=false}renderMix();mixApply()};
-$('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss'])$(id).onchange=sv;rcUI();
+$('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss','afs'])$(id).onchange=sv;rcUI();
 $('fe').onchange=()=>{if(!$('fe').checked)S.sel=-1};
 for(let p=48;p<=72;p++)$('sp').add(new Option(CN[p%12]+(Math.floor(p/12)-1)+(p==60?'（真ん中のド）':''),p));$('sp').value=60;$('sp').onchange=()=>{S.sp=+$('sp').value;fit();buildSheet();sv()};$('kr').onchange=()=>{fit();sv()};$('zm').onchange=sv;
 $('md').onchange=()=>{if(S.waiting){S.waiting=false;S.t0=now();pushState()}};
-$('cf').onclick=()=>{$('pn').style.top=($('bar').offsetHeight+6)+'px';$('pn').style.maxHeight='calc(100% - '+($('bar').offsetHeight+16)+'px)';$('pn').hidden=!$('pn').hidden};$('x').onclick=()=>$('pn').hidden=true;
-if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
+$('cf').onclick=()=>{const p=$('pn'),full=innerWidth<600||innerHeight<500;p.classList.toggle('full',full);p.style.top=full?'':($('bar').offsetHeight+6)+'px';p.style.maxHeight=full?'':'calc(100% - '+($('bar').offsetHeight+16)+'px)';p.hidden=!p.hidden;if(!p.hidden)p.scrollTop=0};$('x2').onclick=()=>$('pn').hidden=true;$('x').onclick=()=>$('pn').hidden=true;
+if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.afs!=null)$('afs').checked=PR.afs;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
+$('bs').onclick=()=>setBar(false);
+/* スマホの「戻る」：設定・結果・重ねて出したミキサーを開いているときは、ページを離れずに、まずそれを閉じる（ドラム側と同じやり方） */
+(()=>{const panels=[['mx',()=>mxShow(false,true),()=>$('mx').classList.contains('float')],['res',()=>$('res').hidden=true],['pn',()=>$('pn').hidden=true]];
+const open=([id,,c])=>!$(id).hidden&&(!c||c()),anyOpen=()=>panels.some(open);let pushed=false,skip=false;
+setInterval(()=>{const o=anyOpen();if(o&&!pushed){try{history.pushState({panel:1},'');pushed=true}catch(e){}}else if(!o&&pushed){pushed=false;skip=true;try{history.back()}catch(e){skip=false}}},250);
+addEventListener('popstate',()=>{if(skip){skip=false;return}if(pushed){pushed=false;for(const p of panels.slice().reverse())if(open(p)){p[1]();break}if(anyOpen()){try{history.pushState({panel:1},'');pushed=true}catch(e){}}}})})();
+/* 横画面にしたら、次に画面を触ったときに全画面にする（ブラウザの決まりで、触らずに全画面にはできない）。縦に戻したら、自動で入った全画面だけ戻す */
+(()=>{const de=document.documentElement,can=!!de.requestFullscreen,mq=matchMedia('(orientation: landscape)'),touch=matchMedia('(pointer: coarse)').matches;let want=false,auto=false;
+const chk=()=>{if(!can||!touch||!$('afs').checked)return;if(mq.matches){if(!document.fullscreenElement)want=true}else{want=false;if(auto&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});auto=false}};
+mq.addEventListener?mq.addEventListener('change',chk):mq.addListener(chk);chk();
+document.addEventListener('pointerdown',()=>{if(want&&mq.matches&&!document.fullscreenElement&&$('afs').checked){want=false;de.requestFullscreen({navigationUI:'hide'}).then(()=>{auto=true}).catch(()=>{})}},true);
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)auto=false;setTimeout(mxPlace,50)});
+$('fsb').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else if(can)de.requestFullscreen({navigationUI:'hide'}).catch(()=>{})};$('fsb').hidden=!can})();
 addEventListener('resize',mxPlace);mixTop();renderMix();mxShow(MX.open??mxDock(),false);addEventListener('pointerdown',()=>{if(ac)au()});rs();mi();draw();send(mk('hello',{plays:plays()}));
 </script>
 <!-- アクセス数の集計（GoatCounter：Cookieを使わず、個人を特定しない） -->
