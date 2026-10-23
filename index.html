@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piano Falls（仮）</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="description" content="ブラウザで動く鍵盤の練習ソフト。MIDIファイルを読み込んで、落ちてくるノーツと楽譜を表示し、弾いたタイミングを判定します。ドラム練習スコープと同期できます。">
+<style>
+:root{--bg:#14171c;--panel:#1c2027;--line:#2e343e;--fg:#e8eaee;--dim:#9aa1ad;--accent:#4cc9f0;--onAccent:#06212b;--btn:#262b34}
+@media (prefers-color-scheme:light){:root{--bg:#f6f7f9;--panel:#ffffff;--line:#d9dde3;--fg:#1c2027;--dim:#5b6370;--accent:#0b7ea8;--onAccent:#ffffff;--btn:#eceef2}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;line-height:1.6}
+main{max-width:640px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right)) 40px max(16px,env(safe-area-inset-left))}
+h1{font-size:24px;margin:0 0 4px;letter-spacing:.04em}
+.lead{color:var(--dim);margin:0 0 22px;font-size:14px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.choices{grid-template-columns:1fr}}
+a.choice{display:flex;flex-direction:column;gap:4px;padding:18px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--fg);text-decoration:none;transition:border-color .15s,transform .15s}
+a.choice:hover,a.choice:focus-visible{border-color:var(--accent);outline:none;transform:translateY(-1px)}
+a.choice b{font-size:18px}
+a.choice span{font-size:13px;color:var(--dim)}
+a.choice.rec{border:2px solid var(--accent)}
+h2{font-size:14px;letter-spacing:.08em;color:var(--dim);margin:30px 0 8px}
+ul{margin:0;padding-left:20px;font-size:14px}
+li{margin:3px 0}
+a{color:var(--accent)}
+.note{font-size:13px;color:var(--dim)}
+a.formBtn{display:inline-block;padding:10px 16px;border-radius:10px;border:1px solid var(--accent);color:var(--accent);text-decoration:none;font-weight:700}
+a.formBtn:hover{background:var(--accent);color:var(--onAccent)}
+.feats{display:grid;gap:6px}
+@media (min-width:600px){.feats{grid-template-columns:1fr 1fr}.feat[open]{grid-column:1/-1}}
+.feat{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.feat>summary{list-style:none;cursor:pointer;padding:8px 12px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;user-select:none}
+.feat>summary::-webkit-details-marker{display:none}
+.feat>summary::after{content:"▸";margin-left:auto;color:var(--dim);font-weight:400}
+.feat[open]>summary::after{content:"▾"}
+.feat[open]{border-color:var(--accent)}
+.feat>div{padding:0 12px 12px}
+.feat p{margin:0;font-size:14px;color:var(--dim)}
+.feat img{display:block;width:100%;height:auto;margin-top:8px;border-radius:8px;border:1px solid var(--line)}
+.feat img.tall{width:auto;max-width:100%;max-height:320px;margin-left:auto;margin-right:auto}
+.beta{margin:-8px 0 18px;padding:8px 12px;border-radius:10px;border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel));font-size:13px}
+.beta b{color:var(--accent)}
+.infos{display:grid;gap:6px}
+.feat ul,.feat ol{margin:0;padding-left:20px;font-size:14px;color:var(--dim)}
+.feat p+ul,.feat ul+p,.feat p+p{margin-top:6px}
+kbd{font:inherit;font-size:12px;padding:0 5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--btn);color:var(--fg)}
+img.hero{display:block;width:100%;height:auto;margin:16px 0 0;border-radius:8px;border:1px solid var(--line)}
+footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Piano Falls（仮）</h1>
+  <p class="lead">ブラウザで動く、鍵盤の練習ソフトです。MIDIファイルを読み込んで、落ちてくるノーツと楽譜を表示し、弾いたタイミングを判定します。姉妹ソフトの「ドラム練習スコープ」と同期して、いっしょに練習できます。</p>
+
+  <p class="beta"><b>ベータ版です。</b>まだ作っている途中のため、機能はひんぱんに書き換わります。機能・画面・操作のしかたが大きく変わることもあります。</p>
+
+  <div class="choices">
+    <a class="choice rec" href="piano-falls.html"><b>ソフトを開く</b><span>パソコン・スマホ・タブレット共通</span></a>
+    <a class="choice" href="https://pikadrum.github.io/drum/"><b>🥁 ドラム練習スコープ</b><span>姉妹ソフト（ドラム）の配布ページ</span></a>
+  </div>
+
+  <img class="hero" src="img/hero.jpg" alt="上に楽譜、下に落ちてくるノーツと鍵盤を表示して、弾いたタイミングを判定している画面">
+
+  <h2>このソフトの特徴<span style="font-weight:400;letter-spacing:0">（押すと説明と画面が開きます）</span></h2>
+  <div class="feats">
+    <details class="feat"><summary>🎹 インストール不要・無料</summary><div><p>ブラウザで開くだけで使えます。パソコン・スマホ・タブレットとも同じページです。MIDIキーボードがなくても、画面の鍵盤（複数の指で押せます）や、パソコンのキーボードで弾けます。</p></div></details>
+    <details class="feat"><summary>🎼 MIDIファイルを落ちてくるノーツに</summary><div><p>MIDIファイルを読み込むと、弾く音が上から落ちてきて、弾くときに鍵盤が光ります。小節線と小節番号、音名（ドレミ・CDE）も出せます。鍵盤は自分の弾くパートに合わせた数だけ表示し、25〜88鍵から選んだり、2本指のピンチで増やしたり減らしたりもできます。</p></div></details>
+    <details class="feat"><summary>🖐 右手・左手を分けて練習</summary><div><p>トラックごとに右手・左手を決めるか、音の高さで分けます。片手だけ練習するときは、もう片方の手を自動で鳴らします。ノーツは手ごとに色分け（右手＝緑、左手＝青）します。</p><img src="img/hands.jpg" alt="右手だけを練習している画面。左手の音符は灰色" loading="lazy" class="tall"></div></details>
+    <details class="feat"><summary>📝 楽譜も表示（簡易版）</summary><div><p>画面の上に大譜表（ト音記号とヘ音記号）を出し、曲に合わせて流します。今鳴っている音は青、弾けた音は緑、ミスは赤になります。MIDIから自動で作るので、休符や連桁など、省いているところがあります。</p></div></details>
+    <details class="feat"><summary>🎯 タイミングの判定と採点</summary><div><p>弾くたびに「ぴったり・早い・遅い・ミス」とコンボ数を表示します。曲の最後まで弾くと、ランク（S〜D）と点数が出て、曲ごと・片手／両手ごとの自己ベストを記録します。</p><img src="img/result.jpg" alt="曲の終わりに出る結果の画面" loading="lazy" class="tall"></div></details>
+    <details class="feat"><summary>⏸️ 弾くまで待つモード</summary><div><p>正しい鍵を押すまで、曲がその場で止まって待ちます。和音のときは「全部押すまで待つ」か「どれか1音で進む」を選べます。</p></div></details>
+    <details class="feat"><summary>🔁 ループ・テンポ・メトロノーム</summary><div><p>小節を選んでループ、テンポは25〜150%（5%刻み）。メトロノームと、再生前の1小節のカウントも鳴らせます。</p></div></details>
+    <details class="feat"><summary>🔊 選べる音色</summary><div><p>楽器ごとの高音質の音色（ネットから読み込み）、内蔵のピアノの音、シンプルな音から選べます。MIDIファイルのペダル（サステイン）、移調（±12半音）、トラックごとの音量にも対応しています。</p><img src="img/settings.jpg" alt="音色と楽譜の設定の画面" loading="lazy" class="tall"></div></details>
+    <details class="feat"><summary>✍️ 運指を書き込める</summary><div><p>「設定」で「運指を書く」をオンにすると、ノーツを押して指番号（1〜5）を書き込めます。曲ごとにブラウザに保存されます。</p></div></details>
+    <details class="feat"><summary>🥁 ドラム練習スコープと同期</summary><div><p>同じブラウザでドラム練習スコープと開くと、再生・停止・位置・テンポ・ループがそろいます。別の端末とは、同じ部屋番号を入れてつなぎます。曲の受け渡しや、相手が弾くパートを自分の伴奏から消すこともできます。<b>まだ作っている途中で、ドラム側とつないだ確認はこれからです。</b></p></div></details>
+  </div>
+
+  <h2>はじめに</h2>
+  <ul>
+    <li>Google Chrome や Microsoft Edge などのブラウザで使えます。</li>
+    <li>MIDIキーボードや電子ピアノをUSBでつなぐ場合、開いたときに「MIDIデバイスの操作と再プログラム」の許可を求められたら「許可」を選んでください。つながない場合は、どちらを選んでも使えます。</li>
+    <li>iPhone・iPad の Safari や Chrome は MIDIキーボードとの接続に対応していません。画面の鍵盤で弾くことはできます。</li>
+    <li>MIDIファイルが手元にないときは、<a href="https://pikadrum.github.io/drum/">ドラム練習スコープの配布ページ</a>にある練習用の曲（著作権フリーのオリジナル曲）で試せます。メロディ（リードやサックス）のパートを鍵盤で弾けます。</li>
+  </ul>
+
+  <h2>ご要望・不具合の報告</h2>
+  <p class="note" style="color:var(--fg)">使ってみての要望や、うまく動かないところは、こちらのフォームから送ってください（名前は任意・ログイン不要）。ドラム練習スコープと同じフォームなので、<b>鍵盤のソフト（Piano Falls）について</b>だとわかるように書いてください。返信はできませんのでご了承ください。</p>
+  <p><a class="formBtn" href="https://docs.google.com/forms/d/e/1FAIpQLScFlxnOCoQHnpJGOL4SXxdwA6PArkBT3FwHMHZkgAxY0pJtqA/viewform" target="_blank" rel="noopener">📝 ご要望・不具合を送る</a></p>
+
+  <h2>説明・利用規約<span style="font-weight:400;letter-spacing:0">（押すと開きます）</span></h2>
+  <div class="infos">
+    <details class="feat"><summary>📖 使い方</summary><div>
+      <ul>
+        <li>「ソフトを開く」から開き、左上の「MIDI」でMIDIファイルを選んで、▶ で再生します。</li>
+        <li>はじめは、いちばん高い音域のトラックが「演奏」（自分で弾く）、ほかは「自動」（伴奏）になります。「設定」のトラックの一覧で、演奏／自動／消音と、右手／左手／分割を変えられます。</li>
+        <li>弾き方は3通りです。MIDIキーボード、画面の鍵盤（指をすべらせると鍵が切り替わります）、パソコンのキーボード（<kbd>Z</kbd>〜<kbd>/</kbd> の段と <kbd>Q</kbd>〜<kbd>]</kbd> の段。<kbd>←</kbd> <kbd>→</kbd> でオクターブ、<kbd>Space</kbd> で再生／停止）。</li>
+        <li>上のバーの「ループ」は、1回目で今の小節を始まりに、2回目で今の小節を終わりにします。3回目で解除です。「設定」で小節番号を入れて決めることもできます。</li>
+        <li>上のバーで、テンポ、「通常／待つ」、「両手／右手／左手」、ノーツの落ちる速さを選べます。</li>
+        <li>鍵盤の数は、ノーツが落ちてくる所を2本指でピンチして増やしたり減らしたりできます。2本指のまま横に動かすと左右に移動します。パソコンではホイールで増減、<kbd>Shift</kbd>＋ホイールで移動します。</li>
+        <li>設定・自己ベスト・運指・最近開いた曲（最大10曲）は、その端末のブラウザに保存されます。別の端末や別のブラウザには引き継がれません。</li>
+        <li>ドラム練習スコープとの同期（同じ端末）は、両方ともこの配布ページ（pikadrum.github.io）から開いたときに使えます。</li>
+      </ul></div></details>
+    <details class="feat"><summary>🔗 ドラム練習スコープとの同期について</summary><div>
+      <p>同じブラウザで開いたドラム練習スコープとは、自動で同期します。別の端末と同期するときは、「設定」の「同期」で両方に同じ部屋番号（4〜8桁の数字）を入れて「接続」を押します。このとき、接続の準備のために外部の仲介サーバー（<a href="https://peerjs.com/" target="_blank" rel="noopener">PeerJS</a>）を使います。つながったあとは端末どうしで直接やり取りします。</p>
+      <p>同期でそろうのは、再生・停止・位置・テンポ・ループ・カウント・パートの分担・開いている曲です。弾いた音そのものは送らないので、相手の演奏は聞こえません。同期の機能はまだ作っている途中です。</p></div></details>
+    <details class="feat"><summary>🎹 音色と文字について（クレジット）</summary><div>
+      <p>「高音質」の音色には、以下の音源を使用しています。音色データは改変せず、配布元から読み込んで使用しています。</p>
+      <ul>
+        <li><b>FluidR3_GM</b>（作者：Frank Wen）／配布元：<a href="https://github.com/gleitz/midi-js-soundfonts" target="_blank" rel="noopener">midi-js-soundfonts</a>（Benjamin Gleitzman）／ライセンス：<a href="https://creativecommons.org/licenses/by/3.0/deed.ja" target="_blank" rel="noopener">CC BY 3.0</a></li>
+      </ul>
+      <p>楽譜の記号には、<a href="https://fonts.google.com/noto/specimen/Noto+Music" target="_blank" rel="noopener">Noto Music</a>（Google Fonts）を使用しています。ライセンス：<a href="https://openfontlicense.org/" target="_blank" rel="noopener">SIL Open Font License 1.1</a></p>
+      <p lang="en" style="font-size:12px">Sound samples: "FluidR3_GM" by Frank Wen, via midi-js-soundfonts by Benjamin Gleitzman, licensed under CC BY 3.0. No modifications were made. Music symbols: Noto Music via Google Fonts, licensed under the SIL Open Font License 1.1.</p></div></details>
+    <details class="feat"><summary>📜 利用規約・ライセンス</summary><div>
+      <p>本ソフトウェアは、以下の条件のもとで自由にご利用いただけます。（「高音質」の音色データと楽譜の文字は、本規約ではなく、それぞれのライセンスに従います）</p>
+      <ol>
+        <li><b>無償でのご利用</b>：完全に無償（無料）でご利用いただけます。</li>
+        <li><b>商用利用</b>：個人・法人を問わず、商用利用（ビジネス・営利目的）が可能です。</li>
+        <li><b>改変</b>：必要に応じて、一部を改変・加工してご利用いただけます。</li>
+        <li><b>再配布</b>：再配布を行う場合は、このページのURL（https://pikadrum.github.io/keys/）と、この利用規約・音色と文字のクレジットを必ず添えてください。</li>
+        <li><b>免責事項</b>：本ソフトウェアを利用したことによるいかなるトラブルや損害についても、当方は一切の責任を負いません。</li>
+      </ol></div></details>
+  </div>
+
+  <footer>本ソフトは個人が制作したツールです。<br>配布者：pikadrum（ピカドラム）　｜　姉妹ソフト：<a href="https://pikadrum.github.io/drum/">ドラム練習スコープ</a></footer>
+</main>
+</body>
+</html>

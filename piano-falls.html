@@ -8,7 +8,7 @@
 button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #2c3442;border-radius:8px;padding:8px 10px;font:inherit}
 #lp.on{border-color:var(--ac);color:var(--ac)}
 #st{color:var(--d);font-size:12px;width:100%}
-#pn{position:absolute;top:96px;left:8px;right:8px;max-height:68%;overflow:auto;background:#1a1f29f2;border:1px solid #2c3442;border-radius:12px;padding:12px;touch-action:pan-y}
+#pn{position:absolute;top:96px;left:8px;right:8px;max-height:68%;overflow:auto;background:#1a1f29;border:1px solid #2c3442;border-radius:12px;padding:12px;touch-action:pan-y}
 #pn h3{margin:8px 0 6px;font-size:13px;color:var(--ac)}#pn textarea{width:100%;margin-top:6px}
 .r{display:flex;align-items:center;gap:8px;margin:4px 0}.r i{width:12px;height:12px;border-radius:3px}.r span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .n{color:var(--d);font-size:12px;line-height:1.6}
@@ -66,6 +66,8 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <label class="r"><input type="checkbox" id="mu" checked>相手が弾くパートを自分の伴奏から消す</label>
 <label class="r"><input type="checkbox" id="as" checked>相手の曲を自動で開く</label>
 <div class="r"><span>この端末の音の遅れ(ms)</span><input id="dl" class="b" type="number" value="0" style="width:84px"></div>
+<h3>このソフトについて</h3>
+<div class="n">使い方・音色のクレジット・利用規約は <a href="https://pikadrum.github.io/keys/" target="_blank" rel="noopener" style="color:var(--ac)">配布ページ</a> にあります。「高音質」の音色は FluidR3_GM（Frank Wen、CC BY 3.0、midi-js-soundfonts 経由）を使っています。姉妹ソフト：<a href="https://pikadrum.github.io/drum/" target="_blank" rel="noopener" style="color:var(--ac)">ドラム練習スコープ</a></div>
 <button id="x">閉じる</button>
 <div id="mi" style="margin-top:6px;color:var(--d)"></div></div>
 <script>
@@ -417,7 +419,7 @@ $('tp').onchange=()=>{const v=+$('tp').value;S.tp=v;for(const n of S.notes)n.p=M
 $('pv').onchange=sv;$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss'])$(id).onchange=sv;rcUI();
 $('fe').onchange=()=>{if(!$('fe').checked)S.sel=-1};
 for(let p=48;p<=72;p++)$('sp').add(new Option(CN[p%12]+(Math.floor(p/12)-1)+(p==60?'（真ん中のド）':''),p));$('sp').value=60;$('sp').onchange=()=>{S.sp=+$('sp').value;fit();buildSheet();sv()};$('kr').onchange=()=>{fit();sv()};$('zm').onchange=sv;
-$('cf').onclick=()=>$('pn').hidden=!$('pn').hidden;$('x').onclick=()=>$('pn').hidden=true;
+$('cf').onclick=()=>{$('pn').style.top=($('bar').offsetHeight+6)+'px';$('pn').style.maxHeight='calc(100% - '+($('bar').offsetHeight+16)+'px)';$('pn').hidden=!$('pn').hidden};$('x').onclick=()=>$('pn').hidden=true;
 if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
 addEventListener('resize',rs);addEventListener('pointerdown',()=>{if(ac)au()});rs();mi();draw();send(mk('hello',{plays:plays()}));
 </script></body></html>
