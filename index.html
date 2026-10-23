@@ -103,6 +103,8 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
         <li>設定・自己ベスト・運指・最近開いた曲（最大10曲）は、その端末のブラウザに保存されます。別の端末や別のブラウザには引き継がれません。</li>
         <li>ドラム練習スコープとの同期（同じ端末）は、両方ともこの配布ページ（pikadrum.github.io）から開いたときに使えます。</li>
       </ul></div></details>
+    <details class="feat"><summary>📊 アクセス数の集計について</summary><div>
+      <p>このページと、このページから開いたソフトでは、アクセス数を数えるために <a href="https://www.goatcounter.com/" target="_blank" rel="noopener">GoatCounter</a> を使っています。Cookieは使わず、個人を特定する情報は集めません。保存したファイルを直接開いて使うときは、数えません。</p></div></details>
     <details class="feat"><summary>🔗 ドラム練習スコープとの同期について</summary><div>
       <p>同じブラウザで開いたドラム練習スコープとは、自動で同期します。別の端末と同期するときは、「設定」の「同期」で両方に同じ部屋番号（4〜8桁の数字）を入れて「接続」を押します。このとき、接続の準備のために外部の仲介サーバー（<a href="https://peerjs.com/" target="_blank" rel="noopener">PeerJS</a>）を使います。つながったあとは端末どうしで直接やり取りします。</p>
       <p>同期でそろうのは、再生・停止・位置・テンポ・ループ・カウント・パートの分担・開いている曲です。弾いた音そのものは送らないので、相手の演奏は聞こえません。同期の機能はまだ作っている途中です。</p></div></details>
@@ -124,7 +126,20 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
       </ol></div></details>
   </div>
 
-  <footer>本ソフトは個人が制作したツールです。<br>配布者：pikadrum（ピカドラム）　｜　姉妹ソフト：<a href="https://pikadrum.github.io/drum/">ドラム練習スコープ</a></footer>
+  <footer>本ソフトは個人が制作したツールです。<br>配布者：pikadrum（ピカドラム）　｜　姉妹ソフト：<a href="https://pikadrum.github.io/drum/">ドラム練習スコープ</a><span id="visits" hidden>　｜　アクセス数 <b id="visitsN"></b></span></footer>
 </main>
+<!-- アクセス数の集計（GoatCounter：Cookieを使わず、個人を特定しない） -->
+<script data-goatcounter="https://pikadrum.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+// アクセス数の表示（このページ /keys/ の数。ドラム側のページの数は含まない）。読めなかったときは何も出さない
+(function(){
+  if (location.protocol !== "https:") return;
+  fetch("https://pikadrum.goatcounter.com/counter/" + encodeURIComponent(location.pathname) + ".json").then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (!d || !d.count) return;
+    document.getElementById("visitsN").textContent = d.count;
+    document.getElementById("visits").hidden = false;
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
