@@ -142,11 +142,11 @@ if(u32()!=0x4d546864)throw Error('MIDIファイルではありません');u32();
 for(let t=0;t<nt&&o<buf.byteLength;t++){if(u32()!=0x4d54726b)break;const len=u32(),end=o+len;let tick=0,run=0,name='',open={},ns=[],pgc={};
 while(o<end){tick+=vl();if(tick>mx)mx=tick;let s=d.getUint8(o);
 if(s==255){o++;const ty=d.getUint8(o++),l=vl();if(ty==3)name=new TextDecoder().decode(new Uint8Array(buf,o,l));if(ty==0x51)tp.push([tick,d.getUint8(o)<<16|d.getUint8(o+1)<<8|d.getUint8(o+2)]);if(ty==0x58&&l>=2)ts.push([tick,d.getUint8(o),d.getUint8(o+1)]);if(ty==0x59&&l>=2)ks.push([tick,d.getInt8(o),d.getUint8(o+1)]);o+=l}
-else if(s==240||s==247){o++;o+=vl()}
+else if(s==240||s==247){o++;const l=vl();o+=l}
 else{if(s&128){run=s;o++}else s=run;const h=s>>4,c=s&15,a=d.getUint8(o++),v=(h==12||h==13)?0:d.getUint8(o++),k=c*128+a;
 if(h==12&&pgc[c]==null)pgc[c]=a;if(h==11&&a==64)ped.push([tick,c,v>=64]);if(h==9&&v>0){const n={k:tick,p:a,v,c};ns.push(n);(open[k]=open[k]||[]).push(n)}else if(h==8||h==9){const q=open[k];if(q&&q.length)q.shift().ek=tick}}}
 o=end;const chs=[...new Set(ns.map(n=>n.c))].sort((a,b)=>a-b);
-for(const c of chs){const pg=pgc[c]??null,nm=(name||'Track '+(t+1))+(chs.length>1?' Ch'+(c+1)+(c==9?'':' '+GM[pg||0].replace(/_/g,' ')):'');trs.push({name:nm,ns:ns.filter(n=>n.c==c),c,pg})}}
+for(const c of chs){const pg=pgc[c]??null,nm=chs.length>1?'Ch'+(c+1)+(c==9?' ドラム':' '+GM[pg||0].replace(/_/g,' ')):(name||'Track '+(t+1));trs.push({name:nm,ns:ns.filter(n=>n.c==c),c,pg})}}
 tp.sort((a,b)=>a[0]-b[0]);const tm=[];let sec=0,pt=0,pq=5e5;for(const[t,q]of tp){sec+=(t-pt)*pq/1e6/div;pt=t;pq=q;tm.push([t,sec,q])}
 const sc=k=>{let m=tm[0];for(const x of tm){if(x[0]<=k)m=x;else break}return m[1]+(k-m[0])*m[2]/1e6/div};
 const all=[];trs.forEach((t,i)=>t.ns.forEach(n=>all.push({t:sc(n.k),e:sc(n.ek??n.k+div),k:n.k,ek:n.ek??n.k+div,c:n.c,p:n.p,v:n.v,tr:i,j:0})));
@@ -164,7 +164,10 @@ Object.assign(S,{div,tickAt,barT,tsl:ts,ks0:ks.length?ks[0][1]:0});
 for(const n of all){const ev=pd[n.c]||[];let on=false,j=0;while(j<ev.length&&ev[j][0]<=n.e+1e-4){on=ev[j][1];j++}let se=n.e;if(on){se=n.e+10;while(j<ev.length){if(!ev[j][1]){se=ev[j][0];break}j++}}n.se=Math.min(Math.max(se,n.e),n.e+10)}
 for(const n of all)n.p0=n.p;S.tp=0;$('tp').value=0;S.notes=all;S.len=Math.max(...all.map(n=>n.e));S.bars=bars;S.beats=beats;S.loop=null;S.la=null;
 S.tr=trs.map((t,i)=>({name:t.name,pg:t.pg,m:t.c==9?'off':'auto',n:t.ns.length,c:t.c,avg:t.ns.reduce((s,n)=>s+n.p,0)/t.ns.length}));
-const c=S.tr.filter(t=>t.c!=9).sort((a,b)=>b.avg-a.avg)[0];if(c)c.m='play';
+// 最初に「演奏」にするパート（メロディらしいもの）：効果音・パッドを除き、単音で、高さがメロディの範囲にあり、音の数が多いもの。なければ平均の高さがいちばん高いもの
+for(const[i,t]of S.tr.entries()){const ns=all.filter(n=>n.tr==i);let ov=0;for(let j=1;j<ns.length;j++)if(ns[j].t<ns[j-1].e-.03)ov++;t.mono=ov/Math.max(1,ns.length)<.1}
+const fxp=t=>t.pg!=null&&(t.pg>=88&&t.pg<=103||t.pg>=112),cand=S.tr.filter(t=>t.c!=9&&!fxp(t)),mel=cand.filter(t=>t.mono&&t.avg>=55&&t.avg<=88&&t.n>=16);
+const c=mel.sort((a,b)=>b.n-a.n)[0]||(cand.length?cand:S.tr.filter(t=>t.c!=9)).sort((a,b)=>b.avg-a.avg)[0];if(c)c.m='play';
 // 手の初期値：名前に右/左があればそれ、演奏するトラックは分割、ほかは平均の高さで決める
 for(const t of S.tr){const nmL=t.name.toLowerCase();t.h=/left|左|l\.?h\b|bass/.test(nmL)?'L':/right|右|r\.?h\b|melody|メロディ/.test(nmL)?'R':t===c?'S':t.avg>=S.sp?'R':'L'}
 S.bt=[...bars.map(t=>({t,d:1})),...beats.map(t=>({t,d:0}))].sort((a,b)=>a.t-b.t);
