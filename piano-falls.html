@@ -57,6 +57,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <div class="mr"><button class="mb" data-m="ci" title="押すとカウントのオン・オフ">カウント</button><input type="range" id="vCt" min="0" max="100" value="80"><span class="mv"></span></div>
 <div class="mr"><button class="mb" data-m="mt" title="押すとメトロノームのオン・オフ">メトロノーム</button><input type="range" id="vMt" min="0" max="100" value="70"><span class="mv"></span></div>
 </div>
+<div id="mxd" class="n" hidden style="color:var(--ac)">ドラム練習スコープとつながっているので、伴奏とクリックはドラム側で鳴らしています（設定の「同期」で切り替え）。</div>
 <div class="mxs">自分が弾くパート</div><div id="mxP"></div>
 <div class="mxs">伴奏のパート</div><div id="mxA"></div>
 <div class="n">M＝ミュート、S＝ソロ（押したパートだけ鳴らす）。左下の欄で「演奏（自分で弾く）／自動（伴奏）／消音」を変えられます。</div></div>
@@ -85,6 +86,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <h3>音</h3>
 <div class="r"><span>音色</span><select id="snd"><option value="hq">高音質（楽器ごと・ネットから読み込み）<option value="pno">ピアノ（内蔵）<option value="simple">シンプル</select></div>
 <div id="si" class="n"></div>
+<label class="r"><input type="checkbox" id="so">クリック（メトロノーム・カウント）を左、それ以外の音を右に分けて出す（イヤモニでクリックだけ聞くときなど）</label>
 <label class="r"><input type="checkbox" id="ka" checked>弾き始めの音が欠けないように、聞こえないほど小さな音を流し続ける（電池を少し多く使います）</label>
 <label class="r"><input type="checkbox" id="pd" checked>MIDIファイルのペダル（サステイン）で音を伸ばす</label>
 <h3>楽譜</h3>
@@ -104,6 +106,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <h3>同期（pikadrum 同期の仕様 v1）</h3><div id="sy" style="color:var(--d)">同じブラウザ内は自動で連動します。別端末は同じ部屋番号（4〜8桁）を入れて接続します。</div>
 <div class="r"><input id="rm" class="b" inputmode="numeric" maxlength="8" placeholder="部屋番号" style="flex:1;min-width:0"><button id="jb">接続</button><button id="lb">切断</button></div>
 <label class="r"><input type="checkbox" id="mu" checked>相手が弾くパートを自分の伴奏から消す</label>
+<label class="r"><input type="checkbox" id="dlg" checked>ドラム側とつながっている間は、伴奏とクリック（カウント・メトロノーム）をドラム側に任せて、自分の弾く音だけを鳴らす</label>
 <label class="r"><input type="checkbox" id="as" checked>相手の曲を自動で開く</label>
 <div class="r"><span>この端末の音の遅れ(ms)</span><input id="dl" class="b" type="number" value="0" style="width:84px"></div>
 <h3>このソフトについて</h3>
@@ -116,7 +119,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <img class="qr" alt="配布ページ（https://pikadrum.github.io/keys/）のQRコード" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 37 37' shape-rendering='crispEdges'%3E%3Crect width='37' height='37' fill='%23fff'/%3E%3Cpath fill='%23000' d='M4 4h7v1h-7zM14 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h2v1h-2zM26 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM12 5h3v1h-3zM16 5h1v1h-1zM18 5h3v1h-3zM23 5h2v1h-2zM26 5h1v1h-1zM32 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM13 6h2v1h-2zM16 6h3v1h-3zM20 6h1v1h-1zM22 6h1v1h-1zM26 6h1v1h-1zM28 6h3v1h-3zM32 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM14 7h1v1h-1zM16 7h4v1h-4zM23 7h2v1h-2zM26 7h1v1h-1zM28 7h3v1h-3zM32 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM18 8h1v1h-1zM21 8h3v1h-3zM26 8h1v1h-1zM28 8h3v1h-3zM32 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM15 9h3v1h-3zM22 9h2v1h-2zM26 9h1v1h-1zM32 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM24 10h1v1h-1zM26 10h7v1h-7zM13 11h1v1h-1zM17 11h2v1h-2zM20 11h2v1h-2zM23 11h1v1h-1zM4 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM16 12h1v1h-1zM18 12h2v1h-2zM21 12h1v1h-1zM23 12h2v1h-2zM28 12h1v1h-1zM31 12h1v1h-1zM4 13h1v1h-1zM6 13h2v1h-2zM9 13h1v1h-1zM11 13h3v1h-3zM15 13h1v1h-1zM18 13h2v1h-2zM24 13h3v1h-3zM29 13h1v1h-1zM32 13h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM10 14h1v1h-1zM12 14h3v1h-3zM16 14h2v1h-2zM22 14h1v1h-1zM24 14h5v1h-5zM30 14h3v1h-3zM8 15h1v1h-1zM13 15h2v1h-2zM19 15h1v1h-1zM21 15h5v1h-5zM27 15h1v1h-1zM31 15h1v1h-1zM4 16h1v1h-1zM9 16h2v1h-2zM14 16h3v1h-3zM20 16h2v1h-2zM25 16h2v1h-2zM29 16h1v1h-1zM31 16h2v1h-2zM4 17h2v1h-2zM7 17h1v1h-1zM9 17h1v1h-1zM14 17h2v1h-2zM17 17h1v1h-1zM19 17h2v1h-2zM24 17h1v1h-1zM26 17h1v1h-1zM29 17h1v1h-1zM32 17h1v1h-1zM5 18h2v1h-2zM8 18h1v1h-1zM10 18h3v1h-3zM18 18h4v1h-4zM26 18h2v1h-2zM29 18h1v1h-1zM31 18h2v1h-2zM5 19h3v1h-3zM9 19h1v1h-1zM11 19h1v1h-1zM16 19h3v1h-3zM20 19h4v1h-4zM25 19h5v1h-5zM31 19h1v1h-1zM5 20h1v1h-1zM7 20h1v1h-1zM10 20h5v1h-5zM16 20h1v1h-1zM18 20h9v1h-9zM29 20h1v1h-1zM31 20h2v1h-2zM11 21h4v1h-4zM18 21h2v1h-2zM24 21h1v1h-1zM26 21h1v1h-1zM29 21h2v1h-2zM32 21h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM9 22h2v1h-2zM13 22h2v1h-2zM16 22h2v1h-2zM21 22h1v1h-1zM25 22h4v1h-4zM31 22h2v1h-2zM5 23h1v1h-1zM7 23h3v1h-3zM12 23h2v1h-2zM15 23h1v1h-1zM20 23h3v1h-3zM24 23h1v1h-1zM27 23h3v1h-3zM31 23h1v1h-1zM4 24h1v1h-1zM10 24h4v1h-4zM19 24h3v1h-3zM24 24h5v1h-5zM12 25h1v1h-1zM17 25h1v1h-1zM23 25h2v1h-2zM28 25h1v1h-1zM30 25h3v1h-3zM4 26h7v1h-7zM14 26h1v1h-1zM16 26h1v1h-1zM18 26h1v1h-1zM21 26h4v1h-4zM26 26h1v1h-1zM28 26h2v1h-2zM31 26h2v1h-2zM4 27h1v1h-1zM10 27h1v1h-1zM13 27h1v1h-1zM16 27h3v1h-3zM21 27h2v1h-2zM24 27h1v1h-1zM28 27h2v1h-2zM31 27h1v1h-1zM4 28h1v1h-1zM6 28h3v1h-3zM10 28h1v1h-1zM12 28h1v1h-1zM14 28h3v1h-3zM18 28h1v1h-1zM21 28h1v1h-1zM24 28h5v1h-5zM32 28h1v1h-1zM4 29h1v1h-1zM6 29h3v1h-3zM10 29h1v1h-1zM13 29h3v1h-3zM17 29h2v1h-2zM20 29h2v1h-2zM23 29h2v1h-2zM27 29h2v1h-2zM30 29h3v1h-3zM4 30h1v1h-1zM6 30h3v1h-3zM10 30h1v1h-1zM12 30h4v1h-4zM17 30h1v1h-1zM23 30h1v1h-1zM27 30h3v1h-3zM32 30h1v1h-1zM4 31h1v1h-1zM10 31h1v1h-1zM16 31h1v1h-1zM19 31h1v1h-1zM21 31h4v1h-4zM26 31h2v1h-2zM31 31h1v1h-1zM4 32h7v1h-7zM12 32h1v1h-1zM14 32h1v1h-1zM18 32h2v1h-2zM21 32h1v1h-1zM24 32h3v1h-3zM28 32h2v1h-2zM31 32h2v1h-2z'/%3E%3C/svg%3E">
 <button id="x">閉じる</button>
 <div id="mi" style="margin-top:6px;color:var(--d)"></div>
-<div id="buildInfo" class="n" style="text-align:right;font-size:11px">ビルド 2026/10/26 01:23</div></div>
+<div id="buildInfo" class="n" style="text-align:right;font-size:11px">ビルド 2026/10/26 01:32</div></div>
 <script>
 const $=id=>document.getElementById(id),cv=$('c'),g=cv.getContext('2d');
 let W,H;const rs=()=>{const d=devicePixelRatio||1;W=innerWidth-(window.OFF||0);H=innerHeight;cv.style.left=(innerWidth-W)+'px';cv.style.width=W+'px';cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);layout()};
@@ -144,13 +147,18 @@ if(KR[m]){let[lo,hi]=KR[m];if(sel.length&&hi-lo<60){const sh=Math.round(((mn+mx)
 else setView(Math.max(21,mn-1),Math.min(108,mx+1),m=='play'?10:7)}
 // ---- 設定の保存 ----
 const PK='piano-falls-prefs';let PR={};try{PR=JSON.parse(localStorage.getItem(PK))||{}}catch(e){}
-const sv=()=>{try{localStorage.setItem(PK,JSON.stringify({nn:S.nn,bl:$('bl').checked,zm:$('zm').value,kr:$('kr').value=='man'?undefined:$('kr').value,cm:$('cm').value,mt:$('mt').checked,ci:$('ci').checked,wa:$('wa').value,hd:$('hd').value,sp:S.sp,pv:$('pv').value,vAll:$('vAll').value,vBk:$('vBk').value,vCt:$('vCt').value,vMt:$('vMt').value,mxo:MX.open,snd:$('snd').value,pd:$('pd').checked,afs:$('afs').checked,ka:$('ka').checked,sh:$('sh').value,ss:$('ss').value}))}catch(e){}};
+const sv=()=>{try{localStorage.setItem(PK,JSON.stringify({nn:S.nn,bl:$('bl').checked,zm:$('zm').value,kr:$('kr').value=='man'?undefined:$('kr').value,cm:$('cm').value,mt:$('mt').checked,ci:$('ci').checked,wa:$('wa').value,hd:$('hd').value,sp:S.sp,pv:$('pv').value,vAll:$('vAll').value,vBk:$('vBk').value,vCt:$('vCt').value,vMt:$('vMt').value,mxo:MX.open,snd:$('snd').value,pd:$('pd').checked,afs:$('afs').checked,so:$('so').checked,dlg:$('dlg').checked,ka:$('ka').checked,sh:$('sh').value,ss:$('ss').value}))}catch(e){}};
 // ---- 音 ----
 // 音の行き先：各パート→伴奏(bB)、自分の音(bM)、カウント(bC)、メトロノーム(bT)→全体(mg)→出力
-let ac,mg,bM,bB,bC,bT,OUTD;function au(){if(!ac){ac=new AudioContext();mg=ac.createGain();mg.connect(ac.destination);
-[bM,bB,bC,bT]=[0,0,0,0].map(()=>{const x=ac.createGain();x.connect(mg);return x});mixApply()}if(ac.state!='running')ac.resume();keepAlive();return ac}
+let ac,mg,mgC,bM,bB,bC,bT,OUTD;function au(){if(!ac){ac=new AudioContext();mg=ac.createGain();mgC=ac.createGain();applySplit();
+[bM,bB,bC,bT]=[mg,mg,mgC,mgC].map(d=>{const x=ac.createGain();x.connect(d);return x});mixApply()}if(ac.state!='running')ac.resume();keepAlive();return ac}
 /* 弾き始めの音が欠けないように：スマホやブラウザは、無音が続くと音の出口を休ませ、次の音の頭が欠ける。
    聞こえないほど小さな音（約-84dB）を流し続けて休ませない。ページを隠したら止める（設定で切り替え） */
+/* 分けて出す：オンなら左＝クリック（メトロノーム・カウント）、右＝それ以外の音（どちらも1つにまとめた音）。ドラム側と同じ */
+let splitNodes=null;function applySplit(){if(!ac)return;try{mg.disconnect();mgC.disconnect()}catch(e){}if(splitNodes){for(const n of splitNodes)try{n.disconnect()}catch(e){}splitNodes=null}
+if(!$('so').checked){mg.connect(ac.destination);mgC.connect(ac.destination);return}
+const mono=()=>{const g=ac.createGain();g.channelCount=1;g.channelCountMode='explicit';g.channelInterpretation='speakers';return g},mL=mono(),mR=mono(),mm=ac.createChannelMerger(2);
+mgC.connect(mL).connect(mm,0,0);mg.connect(mR).connect(mm,0,1);mm.connect(ac.destination);splitNodes=[mL,mR,mm]}
 let kaSrc=null;function keepAlive(){const on=ac&&$('ka').checked&&!document.hidden;
 if(on&&!kaSrc){const b=ac.createBuffer(1,ac.sampleRate,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*6e-5;
 kaSrc=ac.createBufferSource();kaSrc.buffer=b;kaSrc.loop=true;kaSrc.connect(ac.destination);kaSrc.start()}
@@ -331,10 +339,14 @@ g.fillStyle='#1d6fd155';g.fillRect(X-1,tT-ls,3,bB-tT+2*ls)}
 const MX={mu:{}};
 const trGain=t=>{const solo=S.tr.some(x=>x.so);return t.mu||(solo&&!t.so)?0:(t.vol??100)/100};
 function tnode(t){if(!t.node||t.node.context!==ac){t.node=ac.createGain();t.node.connect(bB);t.node.gain.value=trGain(t)}return t.node}
-function mixApply(){if(!ac)return;const v=(id,k)=>MX.mu[k]?0:$(id).value/100,T=ac.currentTime;
-mg.gain.setTargetAtTime(.5*v('vAll','all'),T,.02);bM.gain.setTargetAtTime(v('pv','mine'),T,.02);bB.gain.setTargetAtTime(v('vBk','back'),T,.02);
-bC.gain.setTargetAtTime(1.2*$('vCt').value/100,T,.02);bT.gain.setTargetAtTime(1.2*$('vMt').value/100,T,.02);
-for(const t of S.tr)if(t.node&&t.node.context===ac)t.node.gain.setTargetAtTime(trGain(t),T,.02)}
+/* 同期中は伴奏とクリックを相手に任せる：ドラム側とつながっている間は、自分の弾く音だけを鳴らす（同じ音が2台から少しずれて鳴り、ダブって聞こえるのを防ぐ） */
+const delegated=()=>$('dlg').checked&&live().some(p=>p.app=='drum');
+/* 音量をすぐ変える（短いフェードで、鳴っていない間も確実に変わるように） */
+function setG(p,x){const T=ac.currentTime;p.cancelScheduledValues(T);p.setValueAtTime(p.value,T);p.linearRampToValueAtTime(x,T+.03)}
+function mixApply(){if(!ac)return;const v=(id,k)=>MX.mu[k]?0:$(id).value/100,T=ac.currentTime,dg=delegated();
+setG(mg.gain,.5*v('vAll','all'));setG(mgC.gain,.5*v('vAll','all'));setG(bM.gain,v('pv','mine'));setG(bB.gain,dg?0:v('vBk','back'));
+setG(bC.gain,dg?0:1.2*$('vCt').value/100);setG(bT.gain,dg?0:1.2*$('vMt').value/100);$('mxd').hidden=!dg;
+for(const t of S.tr)if(t.node&&t.node.context===ac)setG(t.node.gain,trGain(t))}
 function mixTop(){for(const b of document.querySelectorAll('#mx .mb')){const k=b.dataset.m;b.classList.toggle('off',k=='ci'||k=='mt'?!$(k).checked:!!MX.mu[k])}
 for(const r of document.querySelectorAll('#mx .mr'))r.querySelector('.mv').textContent=r.querySelector('input').value}
 function renderMix(){const P=$('mxP'),A=$('mxA');P.innerHTML='';A.innerHTML='';
@@ -461,11 +473,11 @@ function applyState(m){if(!S.len)return;setLoop(m.loop);
 if(m.playing){const cf=typeof m.countFrom=='number'?m.countFrom:null,t=cf!=null?target(m):wrapT(target(m));
 if(!(S.playing&&S.rate==m.rate&&Math.abs(dif(posNow(),t))<=.03)){if(cf!=null&&t<cf){startAt(t,now(),m.rate,cf);countClicks(cf,t,m.rate)}else startAt(t,now(),m.rate)}}else{stopP(m.pos);S.rate=m.rate;setRateUI(m.rate)}}
 function handle(m){switch(m.type){
-case'hello':peers[m.id]={t:Date.now(),plays:m.plays};if(S.len){send(stateMsg());pushSong()}break;
-case'ping':peers[m.id]={t:Date.now(),plays:m.plays};break;
+case'hello':peers[m.id]={t:Date.now(),plays:m.plays,app:m.app};if(S.len){send(stateMsg());pushSong()}break;
+case'ping':peers[m.id]={t:Date.now(),plays:m.plays,app:m.app};break;
 case'bye':delete peers[m.id];break;
 case'song':if($('as').checked&&m.data&&!(m.name==fname&&m.data.length==b64.length)){b64=m.data;fname=m.name;try{load(Uint8Array.from(atob(b64),c=>c.charCodeAt(0)).buffer);addRecent();if(lastSt)applyState(lastSt)}catch(e){}}break;
-case'state':{if(!(m.at>lastAt))return;lastAt=m.at;leader=m.id;lastSt=m;if(m.plays)peers[m.id]={t:Date.now(),plays:m.plays};applyState(m);break}
+case'state':{if(!(m.at>lastAt))return;lastAt=m.at;leader=m.id;lastSt=m;if(m.plays)peers[m.id]={t:Date.now(),plays:m.plays,app:m.app};applyState(m);break}
 case'tick':{if(m.id!=leader||!S.playing||!m.playing||$('md').value=='wait')return;const t=wrapT(target(m)),d=dif(posNow(),t),a=Math.abs(d);
 if(a<=.008)return;if(a<=.25)S.pos0-=Math.max(-.01,Math.min(.01,d/2));else startAt(t,now(),S.rate)}}}
 BC.onmessage=e=>{const m=e.data;if(!m||m.v!==1||m.id===ID||seen.has(m.mid))return;seen.add(m.mid);net(m);handle(m)};
@@ -491,6 +503,7 @@ $('lb').onclick=()=>{send(mk('bye'));leave(false);$('sy').textContent='切断し
 $('dl').onchange=e=>{DLY=+e.target.value||0};
 setInterval(()=>{if(S.playing&&!S.waiting&&leader===ID&&S.len){const m=stateMsg();m.type='tick';send(m)}},1000);
 setInterval(()=>send(mk('ping',{plays:plays()})),2000);
+/* 相手が来たり去ったりしたら、任せるかどうかを見直す */let dg0=false;setInterval(()=>{const d=delegated();if(d!==dg0){dg0=d;mixApply()}},500);
 addEventListener('pagehide',()=>send(mk('bye')));
 // ---- 内蔵の練習曲（ピアノ）----
 // 書き方：音名＋オクターブ（C4＝真ん中のド、#・b）、和音は「+」、休みは r。「/長さ」は4分音符を1とした拍の数（省くと前と同じ）。「@指番号」。「|」は小節線
@@ -623,12 +636,12 @@ $('tp').onchange=()=>{const v=+$('tp').value;S.tp=v;for(const n of S.notes)n.p=M
 for(const id of['vAll','pv','vBk','vCt','vMt']){$(id).oninput=()=>{mixApply();mixTop()};$(id).onchange=sv}
 for(const b of document.querySelectorAll('#mx .mb'))b.onclick=()=>{const k=b.dataset.m;if(k=='ci'||k=='mt'){$(k).checked=!$(k).checked;sv()}else MX.mu[k]=!MX.mu[k];mixApply();mixTop()};
 $('mxr').onclick=()=>{for(const t of S.tr){t.vol=100;t.mu=t.so=false}renderMix();mixApply()};
-$('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss','afs'])$(id).onchange=sv;$('ka').onchange=()=>{sv();keepAlive()};rcUI();
+$('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss','afs'])$(id).onchange=sv;$('ka').onchange=()=>{sv();keepAlive()};$('so').onchange=()=>{sv();applySplit()};$('dlg').onchange=()=>{sv();mixApply()};rcUI();
 $('fe').onchange=()=>{if(!$('fe').checked)S.sel=-1};
 for(let p=48;p<=72;p++)$('sp').add(new Option(CN[p%12]+(Math.floor(p/12)-1)+(p==60?'（真ん中のド）':''),p));$('sp').value=60;$('sp').onchange=()=>{S.sp=+$('sp').value;fit();buildSheet();sv()};$('kr').onchange=()=>{fit();sv()};$('zm').onchange=sv;
 $('md').onchange=()=>{if(S.waiting){S.waiting=false;S.t0=now();pushState()}};
 $('cf').onclick=()=>{const p=$('pn'),full=innerWidth<600||innerHeight<500;p.classList.toggle('full',full);p.style.left=full?'':(OFF+8)+'px';p.style.top=full?'':($('bar').offsetHeight+6)+'px';p.style.maxHeight=full?'':'calc(100% - '+($('bar').offsetHeight+16)+'px)';p.hidden=!p.hidden;if(!p.hidden)p.scrollTop=0};$('x2').onclick=()=>$('pn').hidden=true;$('x').onclick=()=>$('pn').hidden=true;
-if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.afs!=null)$('afs').checked=PR.afs;if(PR.ka!=null)$('ka').checked=PR.ka;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
+if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.afs!=null)$('afs').checked=PR.afs;if(PR.so!=null)$('so').checked=PR.so;if(PR.dlg!=null)$('dlg').checked=PR.dlg;if(PR.ka!=null)$('ka').checked=PR.ka;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
 $('bs').onclick=()=>setBar(false);
 /* スマホの「戻る」：設定・結果・重ねて出したミキサーを開いているときは、ページを離れずに、まずそれを閉じる（ドラム側と同じやり方） */
 (()=>{const panels=[['mx',()=>mxShow(false,true),()=>$('mx').classList.contains('float')],['res',()=>$('res').hidden=true],['pn',()=>$('pn').hidden=true]];

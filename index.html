@@ -80,9 +80,9 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
     <details class="feat"><summary>🎯 タイミングの判定と採点</summary><div><p>弾くたびに「ぴったり・早い・遅い・ミス」とコンボ数を表示します。曲の最後まで弾くと、ランク（S〜D）と点数が出て、曲ごと・片手／両手ごとの自己ベストを記録します。</p><img src="img/result.jpg" alt="曲の終わりに出る結果の画面" loading="lazy" class="tall"></div></details>
     <details class="feat"><summary>⏸️ 弾くまで待つモード</summary><div><p>正しい鍵を押すまで、曲がその場で止まって待ちます。和音のときは「全部押すまで待つ」か「どれか1音で進む」を選べます。ドラム練習スコープと同期しているときは、ドラム側も一緒に止まって待ちます。</p></div></details>
     <details class="feat"><summary>🔁 ループ・テンポ・メトロノーム</summary><div><p>小節を選んでループ、テンポは25〜150%（5%刻み）。メトロノームと、再生前の1小節のカウントも鳴らせます。</p></div></details>
-    <details class="feat"><summary>🔊 選べる音色</summary><div><p>楽器ごとの高音質の音色（ネットから読み込み）、内蔵のピアノの音、シンプルな音から選べます。MIDIファイルのペダル（サステイン）と移調（±12半音）にも対応しています。</p><img src="img/settings.jpg" alt="音色と楽譜の設定の画面" loading="lazy" class="tall"></div></details>
+    <details class="feat"><summary>🔊 選べる音色</summary><div><p>楽器ごとの高音質の音色（ネットから読み込み）、内蔵のピアノの音、シンプルな音から選べます。MIDIファイルのペダル（サステイン）と移調（±12半音）にも対応しています。クリック（メトロノーム・カウント）を左、ほかの音を右に分けて出すこともできます（イヤモニでクリックだけ聞くときなど）。</p><img src="img/settings.jpg" alt="音色と楽譜の設定の画面" loading="lazy" class="tall"></div></details>
     <details class="feat"><summary>✍️ 運指を書き込める</summary><div><p>「設定」で「運指を書く」をオンにすると、ノーツを押して指番号（1〜5）を書き込めます。曲ごとにブラウザに保存されます。</p></div></details>
-    <details class="feat"><summary>🥁 ドラム練習スコープと同期</summary><div><p>同じブラウザでドラム練習スコープと開くと、再生・停止・位置・テンポ・ループがそろいます。別の端末とは、同じ部屋番号を入れてつなぎます。曲の受け渡しや、相手が弾くパートを自分の伴奏から消すこともできます。<b>まだ作っている途中で、ドラム側とつないだ確認はこれからです。</b></p></div></details>
+    <details class="feat"><summary>🥁 ドラム練習スコープと同期</summary><div><p>同じブラウザでドラム練習スコープと開くと、再生・停止・位置・テンポ・ループがそろいます。別の端末とは、同じ部屋番号を入れてつなぎます。曲の受け渡しや、相手が弾くパートを自分の伴奏から消すこともできます。2台で使うときは、伴奏とクリックをドラム側だけで鳴らし、鍵盤側は自分の弾く音だけを鳴らすので、同じ音がダブって聞こえません。<b>まだ作っている途中で、ドラム側とつないだ確認はこれからです。</b></p></div></details>
   </div>
 
   <h2>はじめに</h2>
@@ -120,6 +120,7 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
       <p>このページと、このページから開いたソフトでは、アクセス数を数えるために <a href="https://www.goatcounter.com/" target="_blank" rel="noopener">GoatCounter</a> を使っています。Cookieは使わず、個人を特定する情報は集めません。保存したファイルを直接開いて使うときは、数えません。</p></div></details>
     <details class="feat"><summary>🔗 ドラム練習スコープとの同期について</summary><div>
       <p>同じブラウザで開いたドラム練習スコープとは、自動で同期します。別の端末と同期するときは、「設定」の「同期」で両方に同じ部屋番号（4〜8桁の数字）を入れて「接続」を押します。このとき、接続の準備のために外部の仲介サーバー（<a href="https://peerjs.com/" target="_blank" rel="noopener">PeerJS</a>）を使います。つながったあとは端末どうしで直接やり取りします。</p>
+      <p>ドラム練習スコープとつながっている間は、伴奏とクリック（カウント・メトロノーム）をドラム側に任せて、鍵盤側は自分の弾く音だけを鳴らします（2台から同じ音が少しずれて鳴ると、ダブって聞こえるため。「設定」の「同期」で切り替え）。</p>
       <p>同期でそろうのは、再生・停止・位置・テンポ・ループ・カウント・パートの分担・開いている曲です。弾いた音そのものは送らないので、相手の演奏は聞こえません。同期の機能はまだ作っている途中です。</p></div></details>
     <details class="feat"><summary>🎹 音色と文字について（クレジット）</summary><div>
       <p>「高音質」の音色には、以下の音源を使用しています。音色データは改変せず、配布元から読み込んで使用しています。</p>
