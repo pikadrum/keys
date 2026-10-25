@@ -84,6 +84,9 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <label class="r"><input type="checkbox" id="fe">運指を書く</label>
 <div class="n">オンにすると、ノーツをタップするたびに指番号が 1→2→3→4→5→なし と変わります。パソコンではノーツをクリックしてから数字キー1〜5で決め、0かDeleteで消します。曲ごとにこの端末に保存されます。</div>
 <h3>音</h3>
+<div class="r"><span>ピアノの種類</span><select id="pk"></select></div>
+<div class="r"><span>音源</span><select id="sfb"></select></div>
+<div class="n">「ピアノの種類」は、自分の弾く音と、曲のピアノのパート（内蔵の練習曲など）に使います。「音源」は、音色が「高音質」のときに使う録音の種類です。</div>
 <div class="r"><span>音色</span><select id="snd"><option value="hq">高音質（楽器ごと・ネットから読み込み）<option value="pno">ピアノ（内蔵）<option value="simple">シンプル</select></div>
 <div id="si" class="n"></div>
 <label class="r"><input type="checkbox" id="so">クリック（メトロノーム・カウント）を左、それ以外の音を右に分けて出す（イヤモニでクリックだけ聞くときなど）</label>
@@ -110,7 +113,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <label class="r"><input type="checkbox" id="as" checked>相手の曲を自動で開く</label>
 <div class="r"><span>この端末の音の遅れ(ms)</span><input id="dl" class="b" type="number" value="0" style="width:84px"></div>
 <h3>このソフトについて</h3>
-<div class="n">使い方・音色のクレジット・利用規約は <a href="https://pikadrum.github.io/keys/" target="_blank" rel="noopener" style="color:var(--ac)">配布ページ</a> にあります。「高音質」の音色は FluidR3_GM（Frank Wen、CC BY 3.0、midi-js-soundfonts 経由）を使っています。姉妹ソフト：<a href="https://pikadrum.github.io/drum/" target="_blank" rel="noopener" style="color:var(--ac)">ドラム練習スコープ</a></div>
+<div class="n">使い方・音色のクレジット・利用規約は <a href="https://pikadrum.github.io/keys/" target="_blank" rel="noopener" style="color:var(--ac)">配布ページ</a> にあります。「高音質」の音色は FluidR3_GM（Frank Wen、CC BY 3.0）、Musyng Kite・FatBoy（CC BY-SA 3.0）、いずれも midi-js-soundfonts（Benjamin Gleitzman）経由と、GeneralUser GS（S. Christian Collins、GeneralUser GS License、WebAudioFont 経由）を使っています。姉妹ソフト：<a href="https://pikadrum.github.io/drum/" target="_blank" rel="noopener" style="color:var(--ac)">ドラム練習スコープ</a></div>
 <label class="r"><input type="checkbox" id="afs" checked>スマホを横にしたら、画面を触ったときに全画面にする</label>
 <div class="r"><button id="fsb">全画面にする／戻す</button></div>
 <div class="n">画面の低いとき（スマホの横画面など）は、ノーツの所を軽くタップすると上のバーを隠せます。もう一度タップするか、右上の「︙」で戻ります。iPhone・iPad は、Safari の共有ボタンから「ホーム画面に追加」して、そこから開くとアドレスバーが出ません。</div>
@@ -119,7 +122,7 @@ button,select,.b,textarea{background:var(--p);color:var(--fg);border:1px solid #
 <img class="qr" alt="配布ページ（https://pikadrum.github.io/keys/）のQRコード" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 37 37' shape-rendering='crispEdges'%3E%3Crect width='37' height='37' fill='%23fff'/%3E%3Cpath fill='%23000' d='M4 4h7v1h-7zM14 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h2v1h-2zM26 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM12 5h3v1h-3zM16 5h1v1h-1zM18 5h3v1h-3zM23 5h2v1h-2zM26 5h1v1h-1zM32 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM13 6h2v1h-2zM16 6h3v1h-3zM20 6h1v1h-1zM22 6h1v1h-1zM26 6h1v1h-1zM28 6h3v1h-3zM32 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM14 7h1v1h-1zM16 7h4v1h-4zM23 7h2v1h-2zM26 7h1v1h-1zM28 7h3v1h-3zM32 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM18 8h1v1h-1zM21 8h3v1h-3zM26 8h1v1h-1zM28 8h3v1h-3zM32 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM15 9h3v1h-3zM22 9h2v1h-2zM26 9h1v1h-1zM32 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM24 10h1v1h-1zM26 10h7v1h-7zM13 11h1v1h-1zM17 11h2v1h-2zM20 11h2v1h-2zM23 11h1v1h-1zM4 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM16 12h1v1h-1zM18 12h2v1h-2zM21 12h1v1h-1zM23 12h2v1h-2zM28 12h1v1h-1zM31 12h1v1h-1zM4 13h1v1h-1zM6 13h2v1h-2zM9 13h1v1h-1zM11 13h3v1h-3zM15 13h1v1h-1zM18 13h2v1h-2zM24 13h3v1h-3zM29 13h1v1h-1zM32 13h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM10 14h1v1h-1zM12 14h3v1h-3zM16 14h2v1h-2zM22 14h1v1h-1zM24 14h5v1h-5zM30 14h3v1h-3zM8 15h1v1h-1zM13 15h2v1h-2zM19 15h1v1h-1zM21 15h5v1h-5zM27 15h1v1h-1zM31 15h1v1h-1zM4 16h1v1h-1zM9 16h2v1h-2zM14 16h3v1h-3zM20 16h2v1h-2zM25 16h2v1h-2zM29 16h1v1h-1zM31 16h2v1h-2zM4 17h2v1h-2zM7 17h1v1h-1zM9 17h1v1h-1zM14 17h2v1h-2zM17 17h1v1h-1zM19 17h2v1h-2zM24 17h1v1h-1zM26 17h1v1h-1zM29 17h1v1h-1zM32 17h1v1h-1zM5 18h2v1h-2zM8 18h1v1h-1zM10 18h3v1h-3zM18 18h4v1h-4zM26 18h2v1h-2zM29 18h1v1h-1zM31 18h2v1h-2zM5 19h3v1h-3zM9 19h1v1h-1zM11 19h1v1h-1zM16 19h3v1h-3zM20 19h4v1h-4zM25 19h5v1h-5zM31 19h1v1h-1zM5 20h1v1h-1zM7 20h1v1h-1zM10 20h5v1h-5zM16 20h1v1h-1zM18 20h9v1h-9zM29 20h1v1h-1zM31 20h2v1h-2zM11 21h4v1h-4zM18 21h2v1h-2zM24 21h1v1h-1zM26 21h1v1h-1zM29 21h2v1h-2zM32 21h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM9 22h2v1h-2zM13 22h2v1h-2zM16 22h2v1h-2zM21 22h1v1h-1zM25 22h4v1h-4zM31 22h2v1h-2zM5 23h1v1h-1zM7 23h3v1h-3zM12 23h2v1h-2zM15 23h1v1h-1zM20 23h3v1h-3zM24 23h1v1h-1zM27 23h3v1h-3zM31 23h1v1h-1zM4 24h1v1h-1zM10 24h4v1h-4zM19 24h3v1h-3zM24 24h5v1h-5zM12 25h1v1h-1zM17 25h1v1h-1zM23 25h2v1h-2zM28 25h1v1h-1zM30 25h3v1h-3zM4 26h7v1h-7zM14 26h1v1h-1zM16 26h1v1h-1zM18 26h1v1h-1zM21 26h4v1h-4zM26 26h1v1h-1zM28 26h2v1h-2zM31 26h2v1h-2zM4 27h1v1h-1zM10 27h1v1h-1zM13 27h1v1h-1zM16 27h3v1h-3zM21 27h2v1h-2zM24 27h1v1h-1zM28 27h2v1h-2zM31 27h1v1h-1zM4 28h1v1h-1zM6 28h3v1h-3zM10 28h1v1h-1zM12 28h1v1h-1zM14 28h3v1h-3zM18 28h1v1h-1zM21 28h1v1h-1zM24 28h5v1h-5zM32 28h1v1h-1zM4 29h1v1h-1zM6 29h3v1h-3zM10 29h1v1h-1zM13 29h3v1h-3zM17 29h2v1h-2zM20 29h2v1h-2zM23 29h2v1h-2zM27 29h2v1h-2zM30 29h3v1h-3zM4 30h1v1h-1zM6 30h3v1h-3zM10 30h1v1h-1zM12 30h4v1h-4zM17 30h1v1h-1zM23 30h1v1h-1zM27 30h3v1h-3zM32 30h1v1h-1zM4 31h1v1h-1zM10 31h1v1h-1zM16 31h1v1h-1zM19 31h1v1h-1zM21 31h4v1h-4zM26 31h2v1h-2zM31 31h1v1h-1zM4 32h7v1h-7zM12 32h1v1h-1zM14 32h1v1h-1zM18 32h2v1h-2zM21 32h1v1h-1zM24 32h3v1h-3zM28 32h2v1h-2zM31 32h2v1h-2z'/%3E%3C/svg%3E">
 <button id="x">閉じる</button>
 <div id="mi" style="margin-top:6px;color:var(--d)"></div>
-<div id="buildInfo" class="n" style="text-align:right;font-size:11px">ビルド 2026/10/26 01:32</div></div>
+<div id="buildInfo" class="n" style="text-align:right;font-size:11px">ビルド 2026/10/26 01:37</div></div>
 <script>
 const $=id=>document.getElementById(id),cv=$('c'),g=cv.getContext('2d');
 let W,H;const rs=()=>{const d=devicePixelRatio||1;W=innerWidth-(window.OFF||0);H=innerHeight;cv.style.left=(innerWidth-W)+'px';cv.style.width=W+'px';cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);layout()};
@@ -147,7 +150,7 @@ if(KR[m]){let[lo,hi]=KR[m];if(sel.length&&hi-lo<60){const sh=Math.round(((mn+mx)
 else setView(Math.max(21,mn-1),Math.min(108,mx+1),m=='play'?10:7)}
 // ---- 設定の保存 ----
 const PK='piano-falls-prefs';let PR={};try{PR=JSON.parse(localStorage.getItem(PK))||{}}catch(e){}
-const sv=()=>{try{localStorage.setItem(PK,JSON.stringify({nn:S.nn,bl:$('bl').checked,zm:$('zm').value,kr:$('kr').value=='man'?undefined:$('kr').value,cm:$('cm').value,mt:$('mt').checked,ci:$('ci').checked,wa:$('wa').value,hd:$('hd').value,sp:S.sp,pv:$('pv').value,vAll:$('vAll').value,vBk:$('vBk').value,vCt:$('vCt').value,vMt:$('vMt').value,mxo:MX.open,snd:$('snd').value,pd:$('pd').checked,afs:$('afs').checked,so:$('so').checked,dlg:$('dlg').checked,ka:$('ka').checked,sh:$('sh').value,ss:$('ss').value}))}catch(e){}};
+const sv=()=>{try{localStorage.setItem(PK,JSON.stringify({nn:S.nn,bl:$('bl').checked,zm:$('zm').value,kr:$('kr').value=='man'?undefined:$('kr').value,cm:$('cm').value,mt:$('mt').checked,ci:$('ci').checked,wa:$('wa').value,hd:$('hd').value,sp:S.sp,pv:$('pv').value,vAll:$('vAll').value,vBk:$('vBk').value,vCt:$('vCt').value,vMt:$('vMt').value,mxo:MX.open,snd:$('snd').value,pk:$('pk').value,sfb:$('sfb').value,pd:$('pd').checked,afs:$('afs').checked,so:$('so').checked,dlg:$('dlg').checked,ka:$('ka').checked,sh:$('sh').value,ss:$('ss').value}))}catch(e){}};
 // ---- 音 ----
 // 音の行き先：各パート→伴奏(bB)、自分の音(bM)、カウント(bC)、メトロノーム(bT)→全体(mg)→出力
 let ac,mg,mgC,bM,bB,bC,bT,OUTD;function au(){if(!ac){ac=new AudioContext();mg=ac.createGain();mgC=ac.createGain();applySplit();
@@ -185,21 +188,34 @@ else{const s=a.createBufferSource(),f=a.createBiquadFilter(),cym=[42,44,46,49,51
 e.gain.setValueAtTime(vv,when);e.gain.exponentialRampToValueAtTime(.001,when+L);s.connect(f);f.connect(e);s.start(when);s.stop(when+L+.05)}return()=>{}}
 // 高音質：MIDI.js 形式の音源（FluidR3_GM）を楽器ごとに読み込む
 const GM='acoustic_grand_piano bright_acoustic_piano electric_grand_piano honkytonk_piano electric_piano_1 electric_piano_2 harpsichord clavinet celesta glockenspiel music_box vibraphone marimba xylophone tubular_bells dulcimer drawbar_organ percussive_organ rock_organ church_organ reed_organ accordion harmonica tango_accordion acoustic_guitar_nylon acoustic_guitar_steel electric_guitar_jazz electric_guitar_clean electric_guitar_muted overdriven_guitar distortion_guitar guitar_harmonics acoustic_bass electric_bass_finger electric_bass_pick fretless_bass slap_bass_1 slap_bass_2 synth_bass_1 synth_bass_2 violin viola cello contrabass tremolo_strings pizzicato_strings orchestral_harp timpani string_ensemble_1 string_ensemble_2 synth_strings_1 synth_strings_2 choir_aahs voice_oohs synth_choir orchestra_hit trumpet trombone tuba muted_trumpet french_horn brass_section synth_brass_1 synth_brass_2 soprano_sax alto_sax tenor_sax baritone_sax oboe english_horn bassoon clarinet piccolo flute recorder pan_flute blown_bottle shakuhachi whistle ocarina lead_1_square lead_2_sawtooth lead_3_calliope lead_4_chiff lead_5_charang lead_6_voice lead_7_fifths lead_8_bass__lead pad_1_new_age pad_2_warm pad_3_polysynth pad_4_choir pad_5_bowed pad_6_metallic pad_7_halo pad_8_sweep fx_1_rain fx_2_soundtrack fx_3_crystal fx_4_atmosphere fx_5_brightness fx_6_goblins fx_7_echoes fx_8_scifi sitar banjo shamisen koto kalimba bagpipe fiddle shanai tinkle_bell agogo steel_drums woodblock taiko_drum melodic_tom synth_drum reverse_cymbal guitar_fret_noise breath_noise seashore bird_tweet telephone_ring helicopter applause gunshot'.split(' ');
-const SFURL='https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/',INST={},NN=['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'],pname=p=>NN[p%12]+(Math.floor(p/12)-1);
-function loadInst(name){if(INST[name])return INST[name].pr;const o=INST[name]={st:'loading',buf:{}};
-o.pr=(async()=>{try{const r=await fetch(SFURL+name+'-mp3.js');if(!r.ok)throw 0;const tx=await r.text(),re=/"([A-G]b?-?\d)"\s*:\s*"data:audio\/[a-z0-9]+;base64,([^"]+)"/g,jobs=[];let m;
-while((m=re.exec(tx))){const key=m[1],b=Uint8Array.from(atob(m[2]),c=>c.charCodeAt(0));jobs.push(au().decodeAudioData(b.buffer).then(x=>{o.buf[key]=x}).catch(()=>{}))}
-await Promise.all(jobs);o.st=Object.keys(o.buf).length?'ok':'err'}catch(e){o.st='err'}sndUI();return o})();sndUI();return o.pr}
-const instOf=ti=>{const t=S.tr[ti];return t&&t.c==9?null:GM[(t&&t.pg)||0]};
-function loadSong(){if($('snd').value!='hq')return;loadInst(GM[0]);for(let i=0;i<S.tr.length;i++){const n=instOf(i);if(n&&S.tr[i].m!='off')loadInst(n)}}
-function sndUI(){const v=Object.entries(INST),ok=v.filter(x=>x[1].st=='ok').length,ld=v.filter(x=>x[1].st=='loading').length,er=v.filter(x=>x[1].st=='err').length;
+/* 高音質の音源は4種類から選べる（ドラム側と同じ）。FluidR3・Musyng Kite・FatBoy は midi-js-soundfonts、GeneralUser GS は WebAudioFont の形式 */
+const SFB={FluidR3_GM:'FluidR3（標準）',MusyngKite:'Musyng Kite（いちばん本物に近い・読み込みに時間がかかる）',FatBoy:'FatBoy（軽くて速い）',GeneralUserGS:'GeneralUser GS（温かみのある音）'};
+const PKS=[[0,'グランドピアノ'],[1,'明るいグランドピアノ'],[2,'エレクトリック・グランド'],[3,'ホンキートンク（酒場風）'],[4,'エレピ（ローズ風）'],[5,'エレピ（FM・80年代風）'],[6,'チェンバロ（ハープシコード）']];
+const bank=()=>SFB[$('sfb').value]?$('sfb').value:'FluidR3_GM',pk=()=>+$('pk').value||0;
+const INST={},NN=['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'],pname=p=>NN[p%12]+(Math.floor(p/12)-1);
+const loadJs=(src,ms)=>new Promise((res,rej)=>{const el=document.createElement('script'),tm=setTimeout(()=>rej(Error('timeout')),ms);el.src=src;el.onload=()=>{clearTimeout(tm);res()};el.onerror=()=>{clearTimeout(tm);rej(Error('load'))};document.head.appendChild(el)});
+const b64buf=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)).buffer;
+function loadInst(prog){const bk=bank(),key=bk+':'+prog;if(INST[key])return INST[key].pr;const o=INST[key]={st:'loading',buf:{},bk};
+o.pr=(async()=>{try{if(bk=='GeneralUserGS'){const nm=String(prog*10).padStart(4,'0')+'_GeneralUserGS_sf2_file';await loadJs('https://surikov.github.io/webaudiofontdata/sound/'+nm+'.js',30000);
+const p=window['_tone_'+nm];if(!p||!p.zones||!p.zones.length)throw 0;await Promise.all(p.zones.map(async z=>{if(!z.buf)try{z.buf=await au().decodeAudioData(b64buf(z.file))}catch(e){}}));o.zones=p.zones.filter(z=>z.buf);o.st=o.zones.length?'ok':'err'}
+else{const r=await fetch('https://gleitz.github.io/midi-js-soundfonts/'+bk+'/'+GM[prog]+'-mp3.js');if(!r.ok)throw 0;const tx=await r.text(),re=/"([A-G]b?-?\d)"\s*:\s*"data:audio\/[a-z0-9]+;base64,([^"]+)"/g,jobs=[];let m;
+while((m=re.exec(tx))){const k=m[1];jobs.push(au().decodeAudioData(b64buf(m[2])).then(x=>{o.buf[k]=x}).catch(()=>{}))}await Promise.all(jobs);o.st=Object.keys(o.buf).length?'ok':'err'}}catch(e){o.st='err'}sndUI();return o})();sndUI();return o.pr}
+/* パートの楽器（MIDIの音色番号）。ピアノ（0番）のパートと、自分の弾く音（ti<0）は「ピアノの種類」にする */
+const instProg=ti=>{if(ti<0)return pk();const t=S.tr[ti];if(t&&t.c==9)return null;const g=(t&&t.pg)||0;return g==0?pk():g};
+function loadSong(){if($('snd').value!='hq')return;loadInst(pk());for(let i=0;i<S.tr.length;i++){const n=instProg(i);if(n!=null&&S.tr[i].m!='off')loadInst(n)}}
+function sndUI(){const v=Object.values(INST).filter(o=>o.bk==bank()),ok=v.filter(x=>x.st=='ok').length,ld=v.filter(x=>x.st=='loading').length,er=v.filter(x=>x.st=='err').length;
 $('si').textContent=$('snd').value!='hq'?'':ld?'音色を読み込み中…（'+ok+'/'+v.length+'）。読み込むまでは内蔵の音で鳴ります。':er?'読み込めない音色がありました（'+er+'）。その楽器は内蔵の音で鳴ります。ネット接続を確認してください。':v.length?'音色を読み込みました（'+ok+'）':''}
 function smp(o,p,v,when,dur){let b=null,q=p;for(let d=0;d<=12&&!b;d++)for(const x of[p-d,p+d]){if(o.buf[pname(x)]){b=o.buf[pname(x)];q=x;break}}if(!b)return null;
 const a=au(),src=a.createBufferSource(),e=a.createGain(),vol=Math.pow(v/127,1.5)*.9;src.buffer=b;src.playbackRate.value=2**((p-q)/12);e.gain.setValueAtTime(vol,when);src.connect(e);e.connect(OUTD||mg);src.start(when);
 const rel=t=>{t=relAt(e,t,.09);try{src.stop(t+.8)}catch(x){}};if(dur!=null)rel(when+dur);return rel}
-// 音を鳴らす（ti＝トラック番号。音色の設定に合わせて選ぶ）
+/* GeneralUser GS：音域の合う録音（ゾーン）を、音の高さに合わせた速さで鳴らす */
+function wafPlay(o,p,v,when,dur){let z=null;for(let i=o.zones.length-1;i>=0;i--){const q=o.zones[i];if(q.keyRangeLow<=p&&q.keyRangeHigh+1>=p){z=q;break}}if(!z)z=o.zones[0];
+const a=au(),src=a.createBufferSource(),e=a.createGain(),vol=Math.pow(v/127,1.5)*.9,base=(z.originalPitch??6000)-100*(z.coarseTune||0)-(z.fineTune||0),sr=z.sampleRate||44100;
+src.buffer=z.buf;src.playbackRate.value=2**((100*p-base)/1200);if((z.loopStart||0)>=1&&z.loopStart<z.loopEnd){src.loop=true;src.loopStart=z.loopStart/sr;src.loopEnd=z.loopEnd/sr}
+e.gain.setValueAtTime(vol,when);src.connect(e);e.connect(OUTD||mg);src.start(when);const rel=t=>{t=relAt(e,t,.09);try{src.stop(t+.8)}catch(x){}};if(dur!=null)rel(when+dur);else if(!src.loop)src.stop(when+src.buffer.duration/src.playbackRate.value+.05);return rel}
+// 音を鳴らす（ti＝トラック番号、-1＝自分の弾く音。音色の設定に合わせて選ぶ）
 function tone(p,v,when,dur,ti,dest){au();OUTD=dest||bB;const m=$('snd').value,t=S.tr[ti];if(t&&t.c==9)return drum(p,v,when);if(m=='simple')return simpleTone(p,v,when,dur);
-if(m=='hq'){const n=instOf(ti)||GM[0];for(const k of[n,GM[0]]){const o=INST[k];if(o&&o.st=='ok'){const r=smp(o,p,v,when,dur);if(r)return r}}}return pno(p,v,when,dur)}
+if(m=='hq'){const n=instProg(ti)??pk();for(const k of[n,pk()]){const o=INST[bank()+':'+k];if(o&&o.st=='ok'){const r=o.zones?wafPlay(o,p,v,when,dur):smp(o,p,v,when,dur);if(r)return r}}}return pno(p,v,when,dur)}
 // ---- MIDI解析 ----
 function parse(buf){const d=new DataView(buf);let o=0;const u32=()=>{const v=d.getUint32(o);o+=4;return v},u16=()=>{const v=d.getUint16(o);o+=2;return v},vl=()=>{let v=0,b;do{b=d.getUint8(o++);v=v<<7|b&127}while(b&128);return v};
 if(u32()!=0x4d546864)throw Error('MIDIファイルではありません');u32();u16();const nt=u16(),div=u16(),tp=[[0,5e5]],ts=[],ks=[],ped=[],trs=[];let mx=0;
@@ -379,7 +395,7 @@ $('rt2').innerHTML=[['ぴったり',S.pf],['早い',S.el],['遅い',S.lt],['ミ�
 $('rb').textContent=best?(old?'自己ベスト更新！（前回まで '+old.sc+'点）':'初めての記録です'):'自己ベスト '+old.sc+'点';$('res').hidden=false;rcUI()}
 $('rx').onclick=()=>$('res').hidden=true;
 /* 強弱：MIDIキーボードは弾いた強さ（ベロシティ 1〜127）で音の大きさを変える。画面の鍵盤とパソコンのキーボードは一定 */
-function press(p,vel=100){act();const a=au();if(held.has(p))return;const so=sus.get(p);if(so){so(a.currentTime);sus.delete(p)}held.set(p,tone(p,30+Math.max(1,Math.min(127,vel))*.76,a.currentTime,null,Math.max(0,S.tr.findIndex(t=>t.m=='play')),bM));
+function press(p,vel=100){act();const a=au();if(held.has(p))return;const so=sus.get(p);if(so){so(a.currentTime);sus.delete(p)}held.set(p,tone(p,30+Math.max(1,Math.min(127,vel))*.76,a.currentTime,null,-1,bM));
 if(!S.playing)return;const t=posNow(),wt=$('md').value=='wait',ea=wt?.08:.18,la=wt?.4:.18;let b=null,bd=9;
 // 待つモードでは、判定線に届く0.08秒前より早く押しても数えない
 for(const n of S.notes){if(n.t>t+ea)break;if(n.p==p&&!n.j&&isPlay(n)&&t-n.t<=la&&Math.abs(n.t-t)<bd){b=n;bd=Math.abs(n.t-t)}}
@@ -636,12 +652,12 @@ $('tp').onchange=()=>{const v=+$('tp').value;S.tp=v;for(const n of S.notes)n.p=M
 for(const id of['vAll','pv','vBk','vCt','vMt']){$(id).oninput=()=>{mixApply();mixTop()};$(id).onchange=sv}
 for(const b of document.querySelectorAll('#mx .mb'))b.onclick=()=>{const k=b.dataset.m;if(k=='ci'||k=='mt'){$(k).checked=!$(k).checked;sv()}else MX.mu[k]=!MX.mu[k];mixApply();mixTop()};
 $('mxr').onclick=()=>{for(const t of S.tr){t.vol=100;t.mu=t.so=false}renderMix();mixApply()};
-$('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss','afs'])$(id).onchange=sv;$('ka').onchange=()=>{sv();keepAlive()};$('so').onchange=()=>{sv();applySplit()};$('dlg').onchange=()=>{sv();mixApply()};rcUI();
+$('mxb').onclick=()=>mxShow($('mx').hidden,true);$('mxc').onclick=()=>mxShow(false,true);$('snd').onchange=()=>{loadSong();sndUI();sv()};for(const[n,t]of PKS)$('pk').add(new Option(t,n));for(const k in SFB)$('sfb').add(new Option(SFB[k],k));$('pk').onchange=$('sfb').onchange=()=>{loadSong();sndUI();sv()};for(const id of['pd','sh','ss','afs'])$(id).onchange=sv;$('ka').onchange=()=>{sv();keepAlive()};$('so').onchange=()=>{sv();applySplit()};$('dlg').onchange=()=>{sv();mixApply()};rcUI();
 $('fe').onchange=()=>{if(!$('fe').checked)S.sel=-1};
 for(let p=48;p<=72;p++)$('sp').add(new Option(CN[p%12]+(Math.floor(p/12)-1)+(p==60?'（真ん中のド）':''),p));$('sp').value=60;$('sp').onchange=()=>{S.sp=+$('sp').value;fit();buildSheet();sv()};$('kr').onchange=()=>{fit();sv()};$('zm').onchange=sv;
 $('md').onchange=()=>{if(S.waiting){S.waiting=false;S.t0=now();pushState()}};
 $('cf').onclick=()=>{const p=$('pn'),full=innerWidth<600||innerHeight<500;p.classList.toggle('full',full);p.style.left=full?'':(OFF+8)+'px';p.style.top=full?'':($('bar').offsetHeight+6)+'px';p.style.maxHeight=full?'':'calc(100% - '+($('bar').offsetHeight+16)+'px)';p.hidden=!p.hidden;if(!p.hidden)p.scrollTop=0};$('x2').onclick=()=>$('pn').hidden=true;$('x').onclick=()=>$('pn').hidden=true;
-if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.afs!=null)$('afs').checked=PR.afs;if(PR.so!=null)$('so').checked=PR.so;if(PR.dlg!=null)$('dlg').checked=PR.dlg;if(PR.ka!=null)$('ka').checked=PR.ka;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
+if(PR.nn!=null){S.nn=+PR.nn;$('nn').value=PR.nn}if(PR.bl!=null)$('bl').checked=PR.bl;if(PR.zm)$('zm').value=PR.zm;if(PR.kr)$('kr').value=PR.kr;if(PR.cm)$('cm').value=PR.cm;if(PR.mt!=null)$('mt').checked=PR.mt;if(PR.ci!=null)$('ci').checked=PR.ci;if(PR.wa)$('wa').value=PR.wa;if(PR.hd)$('hd').value=PR.hd;if(PR.sp){S.sp=+PR.sp;$('sp').value=PR.sp}if(PR.pv!=null)$('pv').value=PR.pv;for(const k of['vAll','vBk','vCt','vMt'])if(PR[k]!=null)$(k).value=PR[k];MX.open=PR.mxo;if(PR.snd)$('snd').value=PR.snd;if(PR.pk!=null)$('pk').value=PR.pk;if(PR.sfb&&SFB[PR.sfb])$('sfb').value=PR.sfb;if(PR.pd!=null)$('pd').checked=PR.pd;if(PR.afs!=null)$('afs').checked=PR.afs;if(PR.so!=null)$('so').checked=PR.so;if(PR.dlg!=null)$('dlg').checked=PR.dlg;if(PR.ka!=null)$('ka').checked=PR.ka;if(PR.sh)$('sh').value=PR.sh;if(PR.ss)$('ss').value=PR.ss;
 $('bs').onclick=()=>setBar(false);
 /* スマホの「戻る」：設定・結果・重ねて出したミキサーを開いているときは、ページを離れずに、まずそれを閉じる（ドラム側と同じやり方） */
 (()=>{const panels=[['mx',()=>mxShow(false,true),()=>$('mx').classList.contains('float')],['res',()=>$('res').hidden=true],['pn',()=>$('pn').hidden=true]];

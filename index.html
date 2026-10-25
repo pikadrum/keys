@@ -80,7 +80,7 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
     <details class="feat"><summary>🎯 タイミングの判定と採点</summary><div><p>弾くたびに「ぴったり・早い・遅い・ミス」とコンボ数を表示します。曲の最後まで弾くと、ランク（S〜D）と点数が出て、曲ごと・片手／両手ごとの自己ベストを記録します。</p><img src="img/result.jpg" alt="曲の終わりに出る結果の画面" loading="lazy" class="tall"></div></details>
     <details class="feat"><summary>⏸️ 弾くまで待つモード</summary><div><p>正しい鍵を押すまで、曲がその場で止まって待ちます。和音のときは「全部押すまで待つ」か「どれか1音で進む」を選べます。ドラム練習スコープと同期しているときは、ドラム側も一緒に止まって待ちます。</p></div></details>
     <details class="feat"><summary>🔁 ループ・テンポ・メトロノーム</summary><div><p>小節を選んでループ、テンポは25〜150%（5%刻み）。メトロノームと、再生前の1小節のカウントも鳴らせます。</p></div></details>
-    <details class="feat"><summary>🔊 選べる音色</summary><div><p>楽器ごとの高音質の音色（ネットから読み込み）、内蔵のピアノの音、シンプルな音から選べます。MIDIファイルのペダル（サステイン）と移調（±12半音）にも対応しています。クリック（メトロノーム・カウント）を左、ほかの音を右に分けて出すこともできます（イヤモニでクリックだけ聞くときなど）。</p><img src="img/settings.jpg" alt="音色と楽譜の設定の画面" loading="lazy" class="tall"></div></details>
+    <details class="feat"><summary>🔊 選べる音色</summary><div><p>楽器ごとの高音質の音色（ネットから読み込み）、内蔵のピアノの音、シンプルな音から選べます。高音質の音源は4種類（FluidR3・Musyng Kite・FatBoy・GeneralUser GS）、ピアノは7種類（グランド・明るいグランド・エレクトリック・グランド・ホンキートンク・エレピ2種類・チェンバロ）から選べます。MIDIファイルのペダル（サステイン）と移調（±12半音）にも対応しています。クリック（メトロノーム・カウント）を左、ほかの音を右に分けて出すこともできます（イヤモニでクリックだけ聞くときなど）。</p><img src="img/settings.jpg" alt="音色と楽譜の設定の画面" loading="lazy" class="tall"></div></details>
     <details class="feat"><summary>✍️ 運指を書き込める</summary><div><p>「設定」で「運指を書く」をオンにすると、ノーツを押して指番号（1〜5）を書き込めます。曲ごとにブラウザに保存されます。</p></div></details>
     <details class="feat"><summary>🥁 ドラム練習スコープと同期</summary><div><p>同じブラウザでドラム練習スコープと開くと、再生・停止・位置・テンポ・ループがそろいます。別の端末とは、同じ部屋番号を入れてつなぎます。曲の受け渡しや、相手が弾くパートを自分の伴奏から消すこともできます。2台で使うときは、伴奏とクリックをドラム側だけで鳴らし、鍵盤側は自分の弾く音だけを鳴らすので、同じ音がダブって聞こえません。<b>まだ作っている途中で、ドラム側とつないだ確認はこれからです。</b></p></div></details>
   </div>
@@ -126,9 +126,11 @@ footer{margin-top:34px;font-size:12px;color:var(--dim);border-top:1px solid var(
       <p>「高音質」の音色には、以下の音源を使用しています。音色データは改変せず、配布元から読み込んで使用しています。</p>
       <ul>
         <li><b>FluidR3_GM</b>（作者：Frank Wen）／配布元：<a href="https://github.com/gleitz/midi-js-soundfonts" target="_blank" rel="noopener">midi-js-soundfonts</a>（Benjamin Gleitzman）／ライセンス：<a href="https://creativecommons.org/licenses/by/3.0/deed.ja" target="_blank" rel="noopener">CC BY 3.0</a></li>
+        <li><b>Musyng Kite</b>・<b>FatBoy</b>（設定で選んだとき）／配布元：midi-js-soundfonts（Benjamin Gleitzman）／ライセンス：<a href="https://creativecommons.org/licenses/by-sa/3.0/deed.ja" target="_blank" rel="noopener">CC BY-SA 3.0</a></li>
+        <li><b>GeneralUser GS</b>（作者：S. Christian Collins、<a href="https://github.com/mrbumpy409/GeneralUser-GS" target="_blank" rel="noopener">配布ページ</a>、設定で選んだとき）／配布元：<a href="https://github.com/surikov/webaudiofont" target="_blank" rel="noopener">WebAudioFont</a>（Sergey Surikov）／ライセンス：GeneralUser GS License</li>
       </ul>
       <p>楽譜の記号には、<a href="https://fonts.google.com/noto/specimen/Noto+Music" target="_blank" rel="noopener">Noto Music</a>（Google Fonts）を使用しています。ライセンス：<a href="https://openfontlicense.org/" target="_blank" rel="noopener">SIL Open Font License 1.1</a></p>
-      <p lang="en" style="font-size:12px">Sound samples: "FluidR3_GM" by Frank Wen, via midi-js-soundfonts by Benjamin Gleitzman, licensed under CC BY 3.0. No modifications were made. Music symbols: Noto Music via Google Fonts, licensed under the SIL Open Font License 1.1.</p></div></details>
+      <p lang="en" style="font-size:12px">Sound samples: "FluidR3_GM" by Frank Wen, via midi-js-soundfonts by Benjamin Gleitzman, licensed under CC BY 3.0. "Musyng Kite" and "FatBoy" soundfonts via midi-js-soundfonts, licensed under CC BY-SA 3.0. "GeneralUser GS" by S. Christian Collins, via WebAudioFont by Sergey Surikov. No modifications were made. Music symbols: Noto Music via Google Fonts, licensed under the SIL Open Font License 1.1.</p></div></details>
     <details class="feat"><summary>📜 利用規約・ライセンス</summary><div>
       <p>本ソフトウェア（内蔵の練習曲を含む）は、以下の条件のもとで自由にご利用いただけます。（「高音質」の音色データと楽譜の文字は、本規約ではなく、それぞれのライセンスに従います）</p>
       <ol>
